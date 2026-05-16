@@ -32,12 +32,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 var authKey = builder.Configuration["Auth:key"] ?? throw new InvalidOperationException("Auth:key configuration is required.");
 
-// Obtener cadena de conexiÃ³n
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("DefaultConnection configuration is required.");
+}
 
-// ConfiguraciÃ³n del contexto de base de datos con MySQL
 builder.Services.AddDbContext<FoodHeavenContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseSqlite(connectionString));
 
 // Registro de controladores y Swagger
 builder.Services.AddControllers();
@@ -89,8 +91,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
         policy.WithOrigins(
-            "http://localhost:5173",
-            "https://food-heaven.onrender.com" // o la URL final del frontend si la tienes
+            "http://localhost:5173"
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
