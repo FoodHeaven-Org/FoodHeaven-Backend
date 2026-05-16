@@ -43,7 +43,9 @@ public class UserCommandServiceImpl : IUserCommandService
             PasswordHashed = _hashService.HashPassword(command.Password),
             Subscription = command.Subscription,
             Phone = command.Phone,
-            City = command.City
+            City = command.City,
+            Address = command.Address,
+            PaymentMethod = command.PaymentMethod
         };
 
         await _userRepository.AddAsync(user);
@@ -72,6 +74,8 @@ public class UserCommandServiceImpl : IUserCommandService
         user.Username = command.Username;
         user.Phone = command.Phone;
         user.City = command.City;
+        user.Address = command.Address;
+        user.PaymentMethod = command.PaymentMethod;
 
         _userRepository.Update(user);
         await _unitOfWork.CompleteAsync();

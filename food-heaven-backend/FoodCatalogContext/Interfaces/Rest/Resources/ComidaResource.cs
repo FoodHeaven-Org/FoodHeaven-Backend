@@ -8,7 +8,7 @@ public record ComidaResource(
     string complemento,
     string url,
     NutrienteResource nutriente,
-    int id_proveedor,
+    IReadOnlyDictionary<string, ComidaTranslationResource> translations,
     int id_tipo_comida,
     int es_especial
 )
@@ -27,7 +27,14 @@ public record ComidaResource(
                 carbo: comida.Carbo,
                 grasa: comida.Grasa
             ),
-            id_proveedor: comida.Id_Proveedor,
+            translations: new Dictionary<string, ComidaTranslationResource>
+            {
+                ["es"] = new(comida.Nombre, comida.Complemento),
+                ["en"] = new(
+                    string.IsNullOrWhiteSpace(comida.NombreEn) ? comida.Nombre : comida.NombreEn,
+                    string.IsNullOrWhiteSpace(comida.ComplementoEn) ? comida.Complemento : comida.ComplementoEn
+                )
+            },
             id_tipo_comida: comida.id_tipo_comida,
             es_especial: comida.es_especial
         );
@@ -39,4 +46,9 @@ public record NutrienteResource(
     int prote,
     int carbo,
     int grasa
+);
+
+public record ComidaTranslationResource(
+    string nombre,
+    string complemento
 );

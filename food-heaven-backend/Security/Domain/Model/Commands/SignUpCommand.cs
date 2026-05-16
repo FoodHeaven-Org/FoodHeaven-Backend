@@ -10,21 +10,35 @@ public record SignUpCommand
     public string Subscription { get; init; }
     public int Phone { get; init; }
     public string City { get; init; }
+    public string Address { get; init; }
+    public string PaymentMethod { get; init; }
 
-    public SignUpCommand(string username, string password, string subscription, int phone, string city, string? fullName = null)
+    public SignUpCommand(
+        string username,
+        string password,
+        string subscription,
+        int phone,
+        string city,
+        string? fullName = null,
+        string? address = null,
+        string? paymentMethod = null)
     {
         if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("Username is required.", nameof(username));
         if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Password is required.", nameof(password));
         if (string.IsNullOrWhiteSpace(subscription)) throw new ArgumentException("Subscription is required.", nameof(subscription));
         if (phone <= 0) throw new ArgumentException("Phone must be greater than zero.", nameof(phone));
         if (string.IsNullOrWhiteSpace(city)) throw new ArgumentException("City is required.", nameof(city));
+        if (!string.IsNullOrWhiteSpace(paymentMethod) && paymentMethod.Length > 80)
+            throw new ArgumentException("Payment method must be at most 80 characters.", nameof(paymentMethod));
 
         FullName = string.IsNullOrWhiteSpace(fullName) ? CreateDisplayName(username) : fullName.Trim();
         Username = username;
         Password = password;
         Subscription = UserSubscriptionPlan.NormalizeCode(subscription);
         Phone = phone;
-        City = city;
+        City = city.Trim();
+        Address = address?.Trim() ?? string.Empty;
+        PaymentMethod = paymentMethod?.Trim() ?? string.Empty;
     }
 
     private static string CreateDisplayName(string username)
