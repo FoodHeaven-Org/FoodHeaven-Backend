@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -9,7 +9,7 @@ using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Exceptions;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
 using food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Resources;
-using food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Transform;
+
 
 namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
 {
@@ -28,7 +28,7 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         {
             var result = await _queryService.Handle(new GetAllProvidersQuery());
             return result.Any()
-                ? Ok(result.Select(ProveedorResourceFromEntityAssembler.ToResourceFromEntity))
+                ? Ok(result.Select(ProveedorResource.FromEntity))
                 : NotFound("No providers found.");
         }
 
@@ -42,7 +42,7 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
 
             var result = await _queryService.Handle(new GetProviderByIdQuery(id));
             return result != null
-                ? Ok(ProveedorResourceFromEntityAssembler.ToResourceFromEntity(result))
+                ? Ok(ProveedorResource.FromEntity(result))
                 : NotFound($"Provider with ID {id} not found.");
         }
 

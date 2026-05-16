@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Resources;
-using food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Transform;
+
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Exceptions;
 
@@ -33,13 +33,13 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
             {
                 var comidas = await _comidaQueryService.Handle(new GetComidasByTipoComidaQuery(idTipoComida.Value));
                 return comidas.Any()
-                    ? Ok(comidas.Select(ComidaResourceFromEntityAssembler.ToResourceFromEntity))
+                    ? Ok(comidas.Select(ComidaResource.FromEntity))
                     : NotFound("No se encontraron comidas para ese tipo.");
             }
 
             var all = await _comidaQueryService.Handle(new GetAllComidaQuery());
             return all.Any()
-                ? Ok(all.Select(ComidaResourceFromEntityAssembler.ToResourceFromEntity))
+                ? Ok(all.Select(ComidaResource.FromEntity))
                 : NotFound("No comidas found.");
         }
 
@@ -54,7 +54,7 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
 
             var result = await _comidaQueryService.Handle(new GetComidaByIdQuery(id));
             return result != null 
-                ? Ok(ComidaResourceFromEntityAssembler.ToResourceFromEntity(result)) 
+                ? Ok(ComidaResource.FromEntity(result)) 
                 : NotFound($"Comida with id '{id}' not found.");
         }
 

@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
@@ -7,7 +7,7 @@ using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Interfaces.Rest.Resources;
-using food_heaven_backend.PlanComidas.Interfaces.Rest.Transform;
+
 
 namespace food_heaven_backend.PlanComidas.Interfaces.Rest;
 
@@ -25,7 +25,7 @@ public class PlanComidaController(
     {
         var result = await queryService.Handle(new GetAllPlanComidasQuery());
         return result.Any()
-            ? Ok(result.Select(PlanComidaResourceFromEntityAssembler.ToResourceFromEntity))
+            ? Ok(result.Select(PlanComidaResource.FromEntity))
             : NotFound("No se encontraron planes.");
     }
 
@@ -36,8 +36,8 @@ public class PlanComidaController(
     {
         var result = await queryService.Handle(new GetPlanComidaByUserIdQuery(id));
         return result.Any()
-            ? Ok(PlanComidaResourceFromEntityAssembler.ToResourcesFromEntities(result))
-            : NotFound($"No se encontró ningún plan con el UserID {id}.");
+            ? Ok(result.Select(PlanComidaResource.FromEntity))
+            : NotFound($"No se encontrÃ³ ningÃºn plan con el UserID {id}.");
     }
 
     [HttpPost]
@@ -49,7 +49,7 @@ public class PlanComidaController(
         try
         {
             var plan = await commandService.Handle(command);
-            return CreatedAtAction(nameof(GetById), new { id = plan.Id }, PlanComidaResourceFromEntityAssembler.ToResourceFromEntity(plan));
+            return CreatedAtAction(nameof(GetById), new { id = plan.IdUsuario }, PlanComidaResource.FromEntity(plan));
         }
         catch (ValidationException ex) { return UnprocessableEntity(ex.Message); }
         catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
