@@ -52,4 +52,55 @@ public class UserCommandServiceImpl : IUserCommandService
 
         return _jwtEncryptService.Encrypt(user);
     }
+
+    public async Task<User> Handle(UpdateUserProfileCommand command, int userId)
+    {
+        var user = await GetExistingUserAsync(userId);
+        var existingUser = await _userRepository.GetByUsernameExceptIdAsync(command.Username, userId);
+        if (existingUser != null)
+            throw new UsernameAlreadyTakenException();
+
+        user.FullName = command.FullName;
+        user.Username = command.Username;
+        user.Phone = command.Phone;
+        user.City = command.City;
+
+        _userRepository.Update(user);
+        await _unitOfWork.CompleteAsync();
+
+        return user;
+    }
+
+    public async Task<User> Handle(ChangeUserSubscriptionCommand command, int userId)
+    {
+        var user = await GetExistingUserAsync(userId);
+
+        user.Subscription = command.Subscription;
+
+        _userRepository.Update(user);
+        await _unitOfWork.CompleteAsync();
+
+        return user;
+    }
+
+    public async Task Handle(ChangeUserPasswordCommand command, int userId)
+    {
+        var user = await GetExistingUserAsync(userId);
+        if (!_hashService.VerifyPassword(command.CurrentPassword, user.PasswordHashed))
+            throw new InvalidCredentialsException();
+
+        user.PasswordHashed = _hashService.HashPassword(command.NewPassword);
+
+        _userRepository.Update(user);
+        await _unitOfWork.CompleteAsync();
+    }
+
+    private async Task<User> GetExistingUserAsync(int userId)
+    {
+        var user = await _userRepository.FindByIdAsync(userId);
+        if (user == null)
+            throw new KeyNotFoundException($"User with ID {userId} not found.");
+
+        return user;
+    }
 }

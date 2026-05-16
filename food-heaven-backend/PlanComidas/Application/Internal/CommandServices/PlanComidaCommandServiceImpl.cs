@@ -13,13 +13,15 @@ public class PlanComidaCommandServiceImpl(
     IPlanComidaRepository repository,
     IUnitOfWork unitOfWork,
     IValidator<CreatePlanComidaCommand> validator,
-    ExternalFoodCatalogService externalFoodCatalogService)
+    ExternalFoodCatalogService externalFoodCatalogService,
+    ExternalUserSubscriptionService externalUserSubscriptionService)
     : IPlanComidaCommandService
 {
     private readonly IPlanComidaRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     private readonly IValidator<CreatePlanComidaCommand> _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     private readonly ExternalFoodCatalogService _externalFoodCatalogService = externalFoodCatalogService ?? throw new ArgumentNullException(nameof(externalFoodCatalogService));
+    private readonly ExternalUserSubscriptionService _externalUserSubscriptionService = externalUserSubscriptionService ?? throw new ArgumentNullException(nameof(externalUserSubscriptionService));
 
     public async Task<PlanComida> Handle(CreatePlanComidaCommand command)
     {
@@ -76,6 +78,7 @@ public class PlanComidaCommandServiceImpl(
         int? currentPlanId = null)
     {
         await _externalFoodCatalogService.EnsureMealsExistAsync(mealIds);
+        await _externalUserSubscriptionService.EnsurePlanFitsSubscriptionAsync(userId, mealIds);
 
         if (await _repository.ExistsOverlappingPlanForUserAsync(userId, startDate, endDate, currentPlanId))
         {

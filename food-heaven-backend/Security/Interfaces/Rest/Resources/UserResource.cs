@@ -1,4 +1,5 @@
 using food_heaven_backend.Security.Domain.Model.Entities;
+using food_heaven_backend.Security.Domain.Model.ValueObjects;
 
 namespace food_heaven_backend.Security.Interfaces.Rest.Resources;
 
@@ -7,17 +8,25 @@ public record UserResource(
     string FullName,
     string Username,
     string Subscription,
+    string SubscriptionName,
+    int MealsPerDay,
+    decimal MonthlyPrice,
     int Phone,
     string City
 )
 {
     public static UserResource FromEntity(User user)
     {
+        var plan = UserSubscriptionPlan.FromCode(user.Subscription);
+
         return new UserResource(
             user.Id,
             user.FullName,
             user.Username,
-            user.Subscription,
+            plan.Code,
+            plan.DisplayName,
+            plan.MealsPerDay,
+            plan.MonthlyPrice,
             user.Phone,
             user.City
         );
