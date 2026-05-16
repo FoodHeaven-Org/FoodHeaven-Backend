@@ -13,3 +13,4 @@ obj/
 
 appsettings.*.local.json
 *.log
+food-heaven-backend/foodheaven.local.db*
