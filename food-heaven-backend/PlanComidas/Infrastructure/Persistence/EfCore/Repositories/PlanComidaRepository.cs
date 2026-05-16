@@ -13,7 +13,25 @@ public class PlanComidaRepository(FoodHeavenContext context)
     {
         return await Context.Set<PlanComida>()
             .Where(p => p.IdUsuario == id)
+            .OrderByDescending(p => p.FechaInicio)
             .ToListAsync();
     }
 
+    public async Task<bool> ExistsOverlappingPlanForUserAsync(
+        int userId,
+        DateTime startDate,
+        DateTime endDate,
+        int? excludedPlanId = null)
+    {
+        var query = Context.Set<PlanComida>()
+            .Where(p => p.IdUsuario == userId)
+            .Where(p => p.FechaInicio < endDate && startDate < p.FechaFin);
+
+        if (excludedPlanId.HasValue)
+        {
+            query = query.Where(p => p.Id != excludedPlanId.Value);
+        }
+
+        return await query.AnyAsync();
+    }
 }

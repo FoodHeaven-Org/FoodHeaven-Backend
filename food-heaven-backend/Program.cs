@@ -4,6 +4,7 @@ using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Repositories;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Domain.Repositories;
 using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
+using food_heaven_backend.PlanComidas.Application.Internal.OutboundServices.Acl;
 using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
 using food_heaven_backend.PlanComidas.Infrastructure.Persistence.EfCore.Repositories;
 using FluentValidation;
@@ -13,9 +14,11 @@ using food_heaven_backend.FoodCatalogContext.Application.Internal.CommandService
 using food_heaven_backend.FoodCatalogContext.Application.Internal.QueryServices;
 using food_heaven_backend.FoodCatalogContext.Domain.Repositories;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
+using food_heaven_backend.FoodCatalogContext.Application.Acl;
 using food_heaven_backend.FoodCatalogContext.Application.Internal.Validators;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Infrastructure.Persistence.EfCore.Repositories;
+using food_heaven_backend.FoodCatalogContext.Interfaces.Acl;
 using food_heaven_backend.Security.Application.Internal.CommandServices;
 using food_heaven_backend.Security.Application.Internal.QueryServices;
 using food_heaven_backend.Security.Domain.Repositories;
@@ -65,6 +68,7 @@ builder.Services.AddScoped<IProveedorCommandService, ProveedorCommandServiceImpl
 builder.Services.AddScoped<IProveedorQueryService, ProveedorQueryServiceImpl>();
 builder.Services.AddScoped<IComidaCommandService, ComidaCommandServiceImpl>();
 builder.Services.AddScoped<IComidaQueryService, ComidaQueryServiceImpl>();
+builder.Services.AddScoped<IFoodCatalogContextFacade, FoodCatalogContextFacadeImpl>();
 builder.Services.AddScoped<IUserQueryService, UserQueryServiceImpl>();
 
 // Registro de repositorios
@@ -72,6 +76,7 @@ builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<IComidaRepository, ComidaRepository>();
 builder.Services.AddScoped<IPlanComidaCommandService, PlanComidaCommandServiceImpl>();
 builder.Services.AddScoped<IPlanComidaQueryService, PlanComidaQueryServiceImpl>();
+builder.Services.AddScoped<ExternalFoodCatalogService>();
 builder.Services.AddScoped<IPlanComidaRepository, PlanComidaRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

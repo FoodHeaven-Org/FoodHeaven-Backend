@@ -1,13 +1,10 @@
 using System.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
-using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Interfaces.Rest.Resources;
-
 
 namespace food_heaven_backend.PlanComidas.Interfaces.Rest;
 
@@ -26,7 +23,7 @@ public class PlanComidaController(
         var result = await queryService.Handle(new GetAllPlanComidasQuery());
         return result.Any()
             ? Ok(result.Select(PlanComidaResource.FromEntity))
-            : NotFound("No se encontraron planes.");
+            : NotFound("No meal plans were found.");
     }
 
     [HttpGet("{id:int}")]
@@ -37,11 +34,12 @@ public class PlanComidaController(
         var result = await queryService.Handle(new GetPlanComidaByUserIdQuery(id));
         return result.Any()
             ? Ok(result.Select(PlanComidaResource.FromEntity))
-            : NotFound($"No se encontró ningún plan con el UserID {id}.");
+            : NotFound($"No meal plan was found for user {id}.");
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(PlanComidaResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Post([FromBody] CreatePlanComidaCommand command)
@@ -52,12 +50,16 @@ public class PlanComidaController(
             return CreatedAtAction(nameof(GetById), new { id = plan.IdUsuario }, PlanComidaResource.FromEntity(plan));
         }
         catch (ValidationException ex) { return UnprocessableEntity(ex.Message); }
+        catch (ArgumentException ex) { return UnprocessableEntity(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
         catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
     }
 
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Put(int id, [FromBody] UpdatePlanComidaCommand command)
     {
@@ -66,6 +68,9 @@ public class PlanComidaController(
             var updated = await commandService.Handle(command, id);
             return updated ? Ok() : NotFound();
         }
+        catch (DataException ex) { return NotFound(ex.Message); }
+        catch (ArgumentException ex) { return UnprocessableEntity(ex.Message); }
+        catch (InvalidOperationException ex) { return Conflict(ex.Message); }
         catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
     }
 

@@ -14,7 +14,7 @@ public class ComidaRepository(FoodHeavenContext context)
         return await Context.Set<Comida>()
             .FirstOrDefaultAsync(p => p.Nombre == nombre);
     }
-    
+
     public async Task<IEnumerable<Comida>> ListByTipoComidaAsync(int idTipoComida)
     {
         return await Context.Set<Comida>()
@@ -22,25 +22,28 @@ public class ComidaRepository(FoodHeavenContext context)
             .Include(c => c.TipoComida)
             .ToListAsync();
     }
+
     public async Task<Comida?> FindComidaByIdAsync(int id)
     {
         return await Context.Set<Comida>()
             .FirstOrDefaultAsync(p => p.Id == id);
     }
-    //public async Task<IEnumerable<Comida>> ListSpecialComidasAsync()
-    //{
-    //    return await Context.Set<Comida>()
-    //        .Where(c => c.EsEspecial)
-    //        .ToListAsync();
-    //}
-    //
-    //public async Task<IEnumerable<Comida>> ListByTipoComidaIdAsync(int tipoComidaId)
-    //{
-    //    return await Context.Set<Comida>()
-    //        .Where(c => c.Id_TipoComida == tipoComidaId)
-    //        .Include(c => c.TipoComida)  // Incluye el TipoComida relacionado
-    //        .ToListAsync();
-    //}
 
+    public async Task<bool> AllMealIdsExistAsync(IEnumerable<int> mealIds)
+    {
+        var distinctMealIds = mealIds
+            .Where(id => id > 0)
+            .Distinct()
+            .ToArray();
 
+        if (distinctMealIds.Length == 0) return false;
+
+        var existingMealIdsCount = await Context.Set<Comida>()
+            .Where(c => distinctMealIds.Contains(c.Id))
+            .Select(c => c.Id)
+            .Distinct()
+            .CountAsync();
+
+        return existingMealIdsCount == distinctMealIds.Length;
+    }
 }
