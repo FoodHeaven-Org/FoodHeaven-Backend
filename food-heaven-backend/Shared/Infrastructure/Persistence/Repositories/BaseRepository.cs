@@ -1,9 +1,9 @@
-﻿using food_heaven_backend.Shared.Domain;
+using food_heaven_backend.Shared.Domain;
 using food_heaven_backend.Shared.Domain.Repositories;
-using food_heaven_backend.Shared.Infraestructure.Persistence.Configuration;
+using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace food_heaven_backend.Shared.Infraestructure.Persistence.Repositories;
+namespace food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {

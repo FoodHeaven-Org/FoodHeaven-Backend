@@ -1,7 +1,7 @@
 using food_heaven_backend.PlanComidas.Domain.Models.Entities;
 using food_heaven_backend.PlanComidas.Domain.Services;
-using food_heaven_backend.Shared.Infraestructure.Persistence.Configuration;
-using food_heaven_backend.Shared.Infraestructure.Persistence.Repositories;
+using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
+using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace food_heaven_backend.PlanComidas.Infrastructure;

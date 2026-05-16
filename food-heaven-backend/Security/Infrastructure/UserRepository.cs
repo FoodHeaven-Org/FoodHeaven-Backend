@@ -1,10 +1,10 @@
-﻿using food_heaven_backend.Security.Domain.Entities;
+using food_heaven_backend.Security.Domain.Entities;
 using food_heaven_backend.Security.Domain.Repositories;
-using food_heaven_backend.Shared.Infraestructure.Persistence.Configuration;
-using food_heaven_backend.Shared.Infraestructure.Persistence.Repositories;
+using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
+using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace food_heaven_backend.Security.Infraestrucutre;
+namespace food_heaven_backend.Security.Infrastructure;
 
 public class UserRepository(FoodHeavenContext context) : BaseRepository<User>(context), IUserRepository
 {

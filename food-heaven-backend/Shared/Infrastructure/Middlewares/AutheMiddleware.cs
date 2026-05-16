@@ -1,8 +1,8 @@
-﻿using food_heaven_backend.Security.Domain.Service;
+using food_heaven_backend.Security.Domain.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 
-namespace food_heaven_backend.Shared.Infraestructure.Middlewares;
+namespace food_heaven_backend.Shared.Infrastructure.Middlewares;
 
 public class AutheMiddleware
 {

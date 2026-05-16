@@ -1,8 +1,8 @@
-﻿using food_heaven_backend.Security.Domain.Entities;
+using food_heaven_backend.Security.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace food_heaven_backend.Shared.Infraestructure.Attribute;
+namespace food_heaven_backend.Shared.Infrastructure.Attribute;
 
 public class CustomAuthorizeAttribute : System.Attribute, IAsyncAuthorizationFilter
 {

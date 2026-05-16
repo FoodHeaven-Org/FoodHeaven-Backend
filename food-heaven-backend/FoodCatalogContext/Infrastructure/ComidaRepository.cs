@@ -1,10 +1,10 @@
-﻿using food_heaven_backend.FoodCatalogContext.Domain.Models.Entities;
+using food_heaven_backend.FoodCatalogContext.Domain.Models.Entities;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
-using food_heaven_backend.Shared.Infraestructure.Persistence.Configuration;
-using food_heaven_backend.Shared.Infraestructure.Persistence.Repositories;
+using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
+using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace food_heaven_backend.FoodCatalogContext.Infraestructure;
+namespace food_heaven_backend.FoodCatalogContext.Infrastructure;
 
 public class ComidaRepository(FoodHeavenContext context)
     : BaseRepository<Comida>(context), IComidaRepository
