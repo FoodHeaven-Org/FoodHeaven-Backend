@@ -24,6 +24,7 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                 entity.HasKey(u => u.Id);
 
                 entity.Property(u => u.Id).HasColumnName("id");
+                entity.Property(u => u.FullName).HasColumnName("full_name").IsRequired().HasMaxLength(120);
                 entity.Property(u => u.Username).HasColumnName("username").IsRequired().HasMaxLength(100);
                 entity.Property(u => u.PasswordHashed).HasColumnName("password_hashed").IsRequired().HasMaxLength(255);
                 entity.Property(u => u.Subscription).HasColumnName("suscription").IsRequired().HasMaxLength(50);

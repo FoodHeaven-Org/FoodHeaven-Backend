@@ -24,38 +24,32 @@ public class UserCommandServiceImpl : IUserCommandService
 
     public async Task<User> Handle(SignUpCommand command)
     {
-        // Verificar si el nombre de usuario ya está registrado
         var existingUser = await _userRepository.GetByUsernameAsync(command.Username);
         if (existingUser != null)
             throw new UsernameAlreadyTakenException();
 
-        // Crear un nuevo usuario con los datos proporcionados en el comando
         var user = new User
         {
+            FullName = command.FullName,
             Username = command.Username,
-            PasswordHashed = _hashService.HashPassword(command.Password), // Cifrar la contraseña
+            PasswordHashed = _hashService.HashPassword(command.Password),
             Subscription = command.Subscription,
-            Phone = command.Phone,  // Asignar el teléfono
-            City = command.City     // Asignar la ciudad
+            Phone = command.Phone,
+            City = command.City
         };
 
-        // Guardar el usuario en la base de datos
         await _userRepository.AddAsync(user);
-        await _unitOfWork.CompleteAsync();  // Completar la unidad de trabajo
+        await _unitOfWork.CompleteAsync();
 
         return user;
     }
 
     public async Task<string> Handle(LoginCommand command)
     {
-        // Verificar si el usuario existe en la base de datos
         var user = await _userRepository.GetByUsernameAsync(command.Username);
-        if (user == null || !_hashService.VerifyPassword(command.Password, user.PasswordHashed))  // Verificar la contraseña
+        if (user == null || !_hashService.VerifyPassword(command.Password, user.PasswordHashed))
             throw new InvalidCredentialsException();
 
-        // Generar el token JWT si las credenciales son válidas
-        var jwtToken = _jwtEncryptService.Encrypt(user);
-
-        return jwtToken;
+        return _jwtEncryptService.Encrypt(user);
     }
 }
