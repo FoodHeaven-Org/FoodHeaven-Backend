@@ -1,7 +1,7 @@
 using System.Data;
 using FluentValidation;
-using food_heaven_backend.PlanComidas.Domain.Models.Commands;
-using food_heaven_backend.PlanComidas.Domain.Models.Entities;
+using food_heaven_backend.PlanComidas.Domain.Model.Commands;
+using food_heaven_backend.PlanComidas.Domain.Model.Entities;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.Shared.Domain.Repositories;
 

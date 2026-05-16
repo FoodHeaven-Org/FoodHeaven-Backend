@@ -1,4 +1,4 @@
-using food_heaven_backend.PlanComidas.Domain.Models.Entities;
+using food_heaven_backend.PlanComidas.Domain.Model.Entities;
 using food_heaven_backend.PlanComidas.Interfaces.REST.Resources;
 
 namespace food_heaven_backend.PlanComidas.Interfaces.REST.Transform;

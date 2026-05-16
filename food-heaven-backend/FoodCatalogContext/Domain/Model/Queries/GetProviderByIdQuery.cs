@@ -1,0 +1,13 @@
+namespace food_heaven_backend.FoodCatalogContext.Domain.Model.Queries
+{
+
+    public record GetProviderByIdQuery
+    {
+        public GetProviderByIdQuery(int providerId)
+        {
+            ProviderId = providerId;
+        }
+
+        public int ProviderId { get; init; }
+    }
+}

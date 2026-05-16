@@ -1,5 +1,5 @@
-using food_heaven_backend.PlanComidas.Domain.Models.Commands;
-using food_heaven_backend.PlanComidas.Domain.Models.Entities;
+using food_heaven_backend.PlanComidas.Domain.Model.Commands;
+using food_heaven_backend.PlanComidas.Domain.Model.Entities;
 
 namespace food_heaven_backend.PlanComidas.Domain.Services;
 

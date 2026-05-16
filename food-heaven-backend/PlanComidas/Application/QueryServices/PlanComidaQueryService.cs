@@ -1,5 +1,5 @@
-using food_heaven_backend.PlanComidas.Domain.Models.Entities;
-using food_heaven_backend.PlanComidas.Domain.Models.Queries;
+using food_heaven_backend.PlanComidas.Domain.Model.Entities;
+using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;
 
 namespace food_heaven_backend.PlanComidas.Application.QueryServices;

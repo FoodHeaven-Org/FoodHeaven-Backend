@@ -1,5 +1,5 @@
-﻿using food_heaven_backend.FoodCatalogContext.Domain.Models.Commands;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Entities;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 
 namespace food_heaven_backend.FoodCatalogContext.Domain.Services;
 

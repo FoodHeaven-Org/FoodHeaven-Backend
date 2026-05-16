@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Entities;
-using food_heaven_backend.PlanComidas.Domain.Models.Entities;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
+using food_heaven_backend.PlanComidas.Domain.Model.Entities;
 using food_heaven_backend.Security.Domain.Entities;
 
 namespace food_heaven_backend.Shared.Infrastructure.Persistence.Configuration

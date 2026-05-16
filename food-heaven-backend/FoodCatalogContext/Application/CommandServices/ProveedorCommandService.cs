@@ -1,9 +1,9 @@
-﻿using System.Data;
+using System.Data;
 using FluentValidation;
 using food_heaven_backend.FoodCatalogContext.Domain;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Commands;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Entities;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Exceptions;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Exceptions;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.Shared.Domain;
 using System;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Commands;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Interfaces.REST.Transform;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Queries;
-using food_heaven_backend.FoodCatalogContext.Domain.Models.Exceptions;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Exceptions;
 
 namespace food_heaven_backend.FoodCatalogContext.Interfaces.REST
 {

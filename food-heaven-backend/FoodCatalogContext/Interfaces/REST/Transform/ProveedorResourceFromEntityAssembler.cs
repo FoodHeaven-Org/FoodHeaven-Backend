@@ -1,4 +1,4 @@
-﻿using food_heaven_backend.FoodCatalogContext.Domain.Models.Entities;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 using food_heaven_backend.FoodCatalogContext.Interfaces.REST.Resources;
 
 namespace food_heaven_backend.FoodCatalogContext.Interfaces.REST.Transform;

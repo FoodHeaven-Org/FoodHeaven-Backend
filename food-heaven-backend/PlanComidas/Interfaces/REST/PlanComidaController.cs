@@ -3,8 +3,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using food_heaven_backend.PlanComidas.Application.CommandServices;
 using food_heaven_backend.PlanComidas.Application.QueryServices;
-using food_heaven_backend.PlanComidas.Domain.Models.Commands;
-using food_heaven_backend.PlanComidas.Domain.Models.Queries;
+using food_heaven_backend.PlanComidas.Domain.Model.Commands;
+using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Interfaces.REST.Transform;
 
