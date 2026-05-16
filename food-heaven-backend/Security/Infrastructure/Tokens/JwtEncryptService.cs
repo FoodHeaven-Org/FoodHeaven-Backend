@@ -1,11 +1,11 @@
-using System.IdentityModel.Tokens.Jwt;
+ï»¿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using food_heaven_backend.Security.Domain.Model.Entities;
 using food_heaven_backend.Security.Domain.Services;
 using Microsoft.IdentityModel.Tokens;
 
-namespace food_heaven_backend.Security.Application
+namespace food_heaven_backend.Security.Infrastructure.Tokens
 {
     public class JwtEncryptService : IJwtEncryptService
     {
@@ -20,7 +20,7 @@ namespace food_heaven_backend.Security.Application
 
         public string Encrypt(User user)
         {
-            // Agregar más claims según los campos de la entidad User
+            // Agregar mÃ¡s claims segÃºn los campos de la entidad User
             var claims = new[]
             {
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),  // User ID

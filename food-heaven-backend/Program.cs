@@ -1,4 +1,4 @@
-using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
+﻿using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
 using food_heaven_backend.Shared.Domain.Repositories;
 using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 using food_heaven_backend.PlanComidas.Domain.Services;
@@ -16,11 +16,12 @@ using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Validators;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Infrastructure.Persistence.Repositories;
-using food_heaven_backend.Security.Application;
 using food_heaven_backend.Security.Application.Internal.CommandServices;
 using food_heaven_backend.Security.Application.Internal.QueryServices;
 using food_heaven_backend.Security.Domain.Repositories;
 using food_heaven_backend.Security.Domain.Services;
+using food_heaven_backend.Security.Infrastructure.Hashing;
+using food_heaven_backend.Security.Infrastructure.Tokens;
 using food_heaven_backend.Security.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,10 +30,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Obtener cadena de conexión
+// Obtener cadena de conexiÃ³n
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Configuración del contexto de base de datos con MySQL
+// ConfiguraciÃ³n del contexto de base de datos con MySQL
 builder.Services.AddDbContext<FoodHeavenContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
@@ -41,7 +42,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configuración de autenticación JWT
+// ConfiguraciÃ³n de autenticaciÃ³n JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -55,7 +56,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Registro de servicios de dominio y aplicación
+// Registro de servicios de dominio y aplicaciÃ³n
 builder.Services.AddScoped<IProveedorCommandService, ProveedorCommandServiceImpl>();
 builder.Services.AddScoped<IProveedorQueryService, ProveedorQueryServiceImpl>();
 builder.Services.AddScoped<IComidaCommandService, ComidaCommandServiceImpl>();
@@ -80,7 +81,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<IJwtEncryptService, JwtEncryptService>();
 
-// Configuración de CORS
+// ConfiguraciÃ³n de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -94,7 +95,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Build de la aplicación
+// Build de la aplicaciÃ³n
 var app = builder.Build();
 
 // Middleware pipeline
@@ -105,8 +106,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Se asegura que la base de datos esté creada
-// Intentar crear la base de datos solo si la conexión existe
+// Se asegura que la base de datos estÃ© creada
+// Intentar crear la base de datos solo si la conexiÃ³n existe
 try
 {
     using var scope = app.Services.CreateScope();
@@ -118,11 +119,11 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"[WARN] La base de datos no está disponible aún: {ex.Message}");
+    Console.WriteLine($"[WARN] La base de datos no estÃ¡ disponible aÃºn: {ex.Message}");
 }
 
 
-// Redirigir la raíz '/' a Swagger
+// Redirigir la raÃ­z '/' a Swagger
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/")
@@ -136,8 +137,8 @@ app.Use(async (context, next) =>
 // Aplicar CORS
 app.UseCors("AllowSpecificOrigin");
 
-// Middleware de autenticación y autorización
-app.UseAuthentication(); // Usa el esquema de autenticación configurado
+// Middleware de autenticaciÃ³n y autorizaciÃ³n
+app.UseAuthentication(); // Usa el esquema de autenticaciÃ³n configurado
 app.UseAuthorization();
 
 app.UseHttpsRedirection();

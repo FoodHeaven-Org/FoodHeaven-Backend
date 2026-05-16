@@ -1,7 +1,6 @@
-using food_heaven_backend.Security.Domain.Services;
-using Org.BouncyCastle.Crypto.Generators;
+﻿using food_heaven_backend.Security.Domain.Services;
 
-namespace food_heaven_backend.Security.Application;
+namespace food_heaven_backend.Security.Infrastructure.Hashing;
 
 public class HashService : IHashService
 {
