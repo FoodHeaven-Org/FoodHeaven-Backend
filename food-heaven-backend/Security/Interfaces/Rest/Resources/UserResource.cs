@@ -4,6 +4,7 @@ namespace food_heaven_backend.Security.Interfaces.Rest.Resources;
 
 public record UserResource(
     int Id,
+    string FullName,
     string Username,
     string Subscription,
     int Phone,
@@ -14,6 +15,7 @@ public record UserResource(
     {
         return new UserResource(
             user.Id,
+            user.FullName,
             user.Username,
             user.Subscription,
             user.Phone,

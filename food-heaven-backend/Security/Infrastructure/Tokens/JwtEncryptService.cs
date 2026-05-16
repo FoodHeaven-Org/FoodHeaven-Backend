@@ -21,14 +21,14 @@ namespace food_heaven_backend.Security.Infrastructure.Tokens
 
         public string Encrypt(User user)
         {
-            // Agregar más claims según los campos de la entidad User
             var claims = new[]
             {
-                new Claim(ClaimTypes.Sid, user.Id.ToString()),  // User ID
-                new Claim(ClaimTypes.Name, user.Username),      // Username
-                new Claim(ClaimTypes.Role, user.Subscription),  // Subscription
-                new Claim("phone", user.Phone.ToString()),      // Phone
-                new Claim("city", user.City)                    // City
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                new Claim("fullName", user.FullName),
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.Subscription),
+                new Claim("phone", user.Phone.ToString()),
+                new Claim("city", user.City)
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
@@ -36,7 +36,7 @@ namespace food_heaven_backend.Security.Infrastructure.Tokens
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(4),  // Expira en 4 horas
+                Expires = DateTime.UtcNow.AddHours(4),
                 SigningCredentials = credentials
             };
 
@@ -78,21 +78,19 @@ namespace food_heaven_backend.Security.Infrastructure.Tokens
                 return null;
             }
 
-            // Obtener los valores de los claims
             var id = principal.FindFirst(ClaimTypes.Sid)?.Value;
+            var fullName = principal.FindFirst("fullName")?.Value;
             var username = principal.FindFirst(ClaimTypes.Name)?.Value;
             var subscription = principal.FindFirst(ClaimTypes.Role)?.Value;
 
-
             if (int.TryParse(id, out var userId) && username != null && subscription != null)
             {
-                // Crear el usuario con los valores obtenidos
                 return new User
                 {
                     Id = userId,
+                    FullName = fullName ?? string.Empty,
                     Username = username,
-                    Subscription = subscription,
-
+                    Subscription = subscription
                 };
             }
 

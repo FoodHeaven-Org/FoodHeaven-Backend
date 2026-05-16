@@ -125,6 +125,7 @@ try
     if (!string.IsNullOrWhiteSpace(context.Database.GetConnectionString()))
     {
         await context.Database.EnsureCreatedAsync();
+        await EnsureLocalUserProfileSchemaAsync(context);
         await FoodHeavenDataSeeder.SeedAsync(context);
     }
 }
@@ -158,3 +159,36 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+static async Task EnsureLocalUserProfileSchemaAsync(FoodHeavenContext context)
+{
+    await context.Database.OpenConnectionAsync();
+
+    try
+    {
+        await using var command = context.Database.GetDbConnection().CreateCommand();
+        command.CommandText = "PRAGMA table_info('user')";
+
+        var hasFullNameColumn = false;
+        await using (var reader = await command.ExecuteReaderAsync())
+        {
+            while (await reader.ReadAsync())
+            {
+                if (string.Equals(reader.GetString(1), "full_name", StringComparison.OrdinalIgnoreCase))
+                {
+                    hasFullNameColumn = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasFullNameColumn)
+        {
+            await context.Database.ExecuteSqlRawAsync("ALTER TABLE \"user\" ADD COLUMN full_name TEXT NOT NULL DEFAULT ''");
+        }
+    }
+    finally
+    {
+        await context.Database.CloseConnectionAsync();
+    }
+}

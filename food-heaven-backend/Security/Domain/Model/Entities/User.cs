@@ -4,6 +4,8 @@ namespace food_heaven_backend.Security.Domain.Model.Entities;
 
 public class User : BaseEntity
 {
+    public string FullName { get; set; } = string.Empty;
+
     public string Username { get; set; } = string.Empty;
     public string PasswordHashed { get; set; } = string.Empty;
 
