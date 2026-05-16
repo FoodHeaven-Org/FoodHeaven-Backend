@@ -7,6 +7,6 @@ public interface IComidaQueryService
 {
     Task<IEnumerable<Comida>> Handle(GetAllComidaQuery query);
     Task<Comida> Handle(GetComidaByIdQuery query);
-    Task<IEnumerable<Comida>> Handle(GetComidaByIdTipoComida query);
+    Task<IEnumerable<Comida>> Handle(GetComidasByTipoComidaQuery query);
 
 }

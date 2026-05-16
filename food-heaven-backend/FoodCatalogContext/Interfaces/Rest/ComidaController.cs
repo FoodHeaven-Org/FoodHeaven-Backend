@@ -28,7 +28,7 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         {
             if (idTipoComida.HasValue && idTipoComida > 0)
             {
-                var comidas = await _comidaQueryService.Handle(new GetComidaByIdTipoComida(idTipoComida.Value));
+                var comidas = await _comidaQueryService.Handle(new GetComidasByTipoComidaQuery(idTipoComida.Value));
                 return comidas.Any()
                     ? Ok(comidas.Select(ComidaResourceFromEntityAssembler.ToResourceFromEntity))
                     : NotFound("No se encontraron comidas para ese tipo.");

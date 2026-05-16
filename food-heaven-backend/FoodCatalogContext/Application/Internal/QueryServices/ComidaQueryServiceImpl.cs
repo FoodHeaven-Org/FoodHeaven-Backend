@@ -24,7 +24,7 @@ namespace food_heaven_backend.FoodCatalogContext.Application.Internal.QueryServi
             return comida;
         }
 
-        public async Task<IEnumerable<Comida>> Handle(GetComidaByIdTipoComida query)
+        public async Task<IEnumerable<Comida>> Handle(GetComidasByTipoComidaQuery query)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
