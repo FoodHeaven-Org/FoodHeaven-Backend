@@ -46,7 +46,7 @@ public class Comida : BaseEntity
     public TipoComida TipoComida { get; set; } = null!;
 
     [Column("es_especial")]
-    public int es_especial { get; set; } // se usa como int en el mock API
+    public int CatalogFeatureFlag { get; set; } = 0;
 
     public Comida(
         string nombre,
@@ -57,7 +57,6 @@ public class Comida : BaseEntity
         int carbo,
         int grasa,
         int idTipoComida,
-        int es_especial,
         string nombreEn = "",
         string complementoEn = "")
     {
@@ -71,7 +70,6 @@ public class Comida : BaseEntity
         Carbo = carbo;
         Grasa = grasa;
         id_tipo_comida = idTipoComida;
-        this.es_especial = es_especial;
     }
 
     public Comida() { }

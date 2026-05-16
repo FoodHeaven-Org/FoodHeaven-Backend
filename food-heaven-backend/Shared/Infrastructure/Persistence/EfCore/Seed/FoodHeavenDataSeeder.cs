@@ -64,7 +64,7 @@ public static class FoodHeavenDataSeeder
             existingMeal.Grasa = meal.Grasa;
             existingMeal.CatalogSourceId = meal.CatalogSourceId;
             existingMeal.id_tipo_comida = meal.id_tipo_comida;
-            existingMeal.es_especial = meal.es_especial;
+            existingMeal.CatalogFeatureFlag = meal.CatalogFeatureFlag;
         }
 
         await context.SaveChangesAsync();
@@ -97,7 +97,7 @@ public static class FoodHeavenDataSeeder
             Grasa = fat,
             CatalogSourceId = 1,
             id_tipo_comida = mealTypeId,
-            es_especial = 0
+            CatalogFeatureFlag = 0
         };
     }
 }

@@ -38,7 +38,6 @@ public class ComidaCommandServiceImpl(
             carbo: command.Carbohidrato,
             grasa: command.Grasa,
             idTipoComida: command.id_tipo_comida,
-            es_especial: command.es_especial ? 1 : 0,
             nombreEn: command.NombreEn,
             complementoEn: command.ComplementoEn
         );
@@ -86,7 +85,6 @@ public class ComidaCommandServiceImpl(
         comida.Carbo = command.Carbohidrato;
         comida.Grasa = command.Grasa;
         comida.id_tipo_comida = command.id_tipo_comida;
-        comida.es_especial = command.es_especial ? 1 : 0;
 
         _comidaRepository.Update(comida);
         await _unitOfWork.CompleteAsync();

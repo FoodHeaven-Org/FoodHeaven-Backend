@@ -52,7 +52,7 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            if (id <= 0) return BadRequest("Invalid provider ID.");
+            if (id <= 0) return BadRequest("Invalid comida ID.");
 
             var result = await _comidaQueryService.Handle(new GetComidaByIdQuery(id));
             return result != null 
@@ -63,6 +63,7 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
 
         // POST: api/Comida
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]

@@ -9,8 +9,7 @@ public record ComidaResource(
     string url,
     NutrienteResource nutriente,
     IReadOnlyDictionary<string, ComidaTranslationResource> translations,
-    int id_tipo_comida,
-    int es_especial
+    int id_tipo_comida
 )
 {
     public static ComidaResource FromEntity(Comida comida)
@@ -35,8 +34,7 @@ public record ComidaResource(
                     string.IsNullOrWhiteSpace(comida.ComplementoEn) ? comida.Complemento : comida.ComplementoEn
                 )
             },
-            id_tipo_comida: comida.id_tipo_comida,
-            es_especial: comida.es_especial
+            id_tipo_comida: comida.id_tipo_comida
         );
     }
 }
