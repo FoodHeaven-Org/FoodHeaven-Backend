@@ -4,7 +4,7 @@ using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
 using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace food_heaven_backend.Security.Infrastructure;
+namespace food_heaven_backend.Security.Infrastructure.Persistence.Repositories;
 
 public class UserRepository(FoodHeavenContext context) : BaseRepository<User>(context), IUserRepository
 {

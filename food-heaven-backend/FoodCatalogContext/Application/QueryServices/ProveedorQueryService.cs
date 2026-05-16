@@ -1,4 +1,4 @@
-using food_heaven_backend.FoodCatalogContext.Domain;
+using food_heaven_backend.FoodCatalogContext.Domain.Repositories;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;

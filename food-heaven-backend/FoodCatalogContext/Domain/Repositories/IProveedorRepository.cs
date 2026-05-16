@@ -1,7 +1,7 @@
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 using food_heaven_backend.Shared.Domain.Repositories;
 
-namespace food_heaven_backend.FoodCatalogContext.Domain;
+namespace food_heaven_backend.FoodCatalogContext.Domain.Repositories;
 
 public interface IProveedorRepository : IBaseRepository<Proveedor>
 {

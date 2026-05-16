@@ -1,10 +1,10 @@
-using food_heaven_backend.FoodCatalogContext.Domain;
+using food_heaven_backend.FoodCatalogContext.Domain.Repositories;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
 using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace food_heaven_backend.FoodCatalogContext.Infrastructure;
+namespace food_heaven_backend.FoodCatalogContext.Infrastructure.Persistence.Repositories;
 
 public class ProveedorRepository(FoodHeavenContext context)
     : BaseRepository<Proveedor>(context), IProveedorRepository
