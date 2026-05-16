@@ -12,7 +12,9 @@ public record UserResource(
     int MealsPerDay,
     decimal MonthlyPrice,
     int Phone,
-    string City
+    string City,
+    string Address,
+    string PaymentMethod
 )
 {
     public static UserResource FromEntity(User user)
@@ -28,7 +30,9 @@ public record UserResource(
             plan.MealsPerDay,
             plan.MonthlyPrice,
             user.Phone,
-            user.City
+            user.City,
+            user.Address,
+            user.PaymentMethod
         );
     }
 }

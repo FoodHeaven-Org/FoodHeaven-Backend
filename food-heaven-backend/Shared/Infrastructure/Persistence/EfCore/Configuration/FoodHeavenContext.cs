@@ -30,8 +30,8 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                 entity.Property(u => u.Subscription).HasColumnName("suscription").IsRequired().HasMaxLength(50);
                 entity.Property(u => u.City).HasColumnName("city").IsRequired().HasMaxLength(50);
                 entity.Property(u => u.Phone).HasColumnName("phone").IsRequired();
-
-
+                entity.Property(u => u.Address).HasColumnName("address").IsRequired().HasMaxLength(180);
+                entity.Property(u => u.PaymentMethod).HasColumnName("payment_method").IsRequired().HasMaxLength(80);
 
             });
             builder.Entity<TipoProveedor>(entity =>

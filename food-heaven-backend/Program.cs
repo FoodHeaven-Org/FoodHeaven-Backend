@@ -166,29 +166,36 @@ static async Task EnsureLocalUserProfileSchemaAsync(FoodHeavenContext context)
 
     try
     {
-        await using var command = context.Database.GetDbConnection().CreateCommand();
-        command.CommandText = "PRAGMA table_info('user')";
-
-        var hasFullNameColumn = false;
-        await using (var reader = await command.ExecuteReaderAsync())
-        {
-            while (await reader.ReadAsync())
-            {
-                if (string.Equals(reader.GetString(1), "full_name", StringComparison.OrdinalIgnoreCase))
-                {
-                    hasFullNameColumn = true;
-                    break;
-                }
-            }
-        }
-
-        if (!hasFullNameColumn)
-        {
-            await context.Database.ExecuteSqlRawAsync("ALTER TABLE \"user\" ADD COLUMN full_name TEXT NOT NULL DEFAULT ''");
-        }
+        await EnsureColumnAsync(context, "user", "full_name", "TEXT NOT NULL DEFAULT ''");
+        await EnsureColumnAsync(context, "user", "address", "TEXT NOT NULL DEFAULT ''");
+        await EnsureColumnAsync(context, "user", "payment_method", "TEXT NOT NULL DEFAULT ''");
     }
     finally
     {
         await context.Database.CloseConnectionAsync();
+    }
+}
+
+static async Task EnsureColumnAsync(FoodHeavenContext context, string tableName, string columnName, string definition)
+{
+    await using var command = context.Database.GetDbConnection().CreateCommand();
+    command.CommandText = $"PRAGMA table_info('{tableName}')";
+
+    var hasColumn = false;
+    await using (var reader = await command.ExecuteReaderAsync())
+    {
+        while (await reader.ReadAsync())
+        {
+            if (string.Equals(reader.GetString(1), columnName, StringComparison.OrdinalIgnoreCase))
+            {
+                hasColumn = true;
+                break;
+            }
+        }
+    }
+
+    if (!hasColumn)
+    {
+        await context.Database.ExecuteSqlRawAsync($"ALTER TABLE \"{tableName}\" ADD COLUMN {columnName} {definition}");
     }
 }
