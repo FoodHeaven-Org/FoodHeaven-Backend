@@ -4,6 +4,7 @@ using food_heaven_backend.Security.Domain.Model.Exceptions;
 using food_heaven_backend.Security.Domain.Repositories;
 using food_heaven_backend.Security.Domain.Services;
 using food_heaven_backend.Shared.Domain.Repositories;
+using food_heaven_backend.PlanComidas.Domain.Repositories;
 
 namespace food_heaven_backend.Security.Application.Internal.CommandServices;
 
@@ -13,13 +14,20 @@ public class UserCommandServiceImpl : IUserCommandService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IHashService _hashService;
     private readonly IJwtEncryptService _jwtEncryptService;
+    private readonly IPlanComidaRepository _planComidaRepository;
 
-    public UserCommandServiceImpl(IUserRepository userRepository, IUnitOfWork unitOfWork, IHashService hashService, IJwtEncryptService jwtEncryptService)
+    public UserCommandServiceImpl(
+        IUserRepository userRepository,
+        IUnitOfWork unitOfWork,
+        IHashService hashService,
+        IJwtEncryptService jwtEncryptService,
+        IPlanComidaRepository planComidaRepository)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _hashService = hashService;
         _jwtEncryptService = jwtEncryptService;
+        _planComidaRepository = planComidaRepository;
     }
 
     public async Task<User> Handle(SignUpCommand command)
@@ -92,6 +100,16 @@ public class UserCommandServiceImpl : IUserCommandService
         user.PasswordHashed = _hashService.HashPassword(command.NewPassword);
 
         _userRepository.Update(user);
+        await _unitOfWork.CompleteAsync();
+    }
+
+    public async Task Handle(DeleteUserAccountCommand command)
+    {
+        var user = await GetExistingUserAsync(command.UserId);
+
+        await _planComidaRepository.RemoveByUserIdAsync(command.UserId);
+        _userRepository.Remove(user);
+
         await _unitOfWork.CompleteAsync();
     }
 

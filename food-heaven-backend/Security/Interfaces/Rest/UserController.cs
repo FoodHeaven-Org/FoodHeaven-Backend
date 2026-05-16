@@ -172,4 +172,23 @@ public class UserController : ControllerBase
             return UnprocessableEntity(new { message = ex.Message });
         }
     }
+
+    [HttpDelete("{userId:int}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteAccount(int userId)
+    {
+        try
+        {
+            if (userId != User.GetAuthenticatedUserId()) return Forbid();
+
+            await _userCommandService.Handle(new DeleteUserAccountCommand(userId));
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }
