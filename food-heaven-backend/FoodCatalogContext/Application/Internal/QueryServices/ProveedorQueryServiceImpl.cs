@@ -4,9 +4,9 @@ using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 
 
-namespace food_heaven_backend.FoodCatalogContext.Application.QueryServices
+namespace food_heaven_backend.FoodCatalogContext.Application.Internal.QueryServices
 {
-    public class ProveedorQueryService(IProveedorRepository proveedorRepository) : IProveedorQueryService
+    public class ProveedorQueryServiceImpl(IProveedorRepository proveedorRepository) : IProveedorQueryService
     {
         private readonly IProveedorRepository _proveedorRepository = proveedorRepository ?? throw new ArgumentNullException(nameof(proveedorRepository));
 

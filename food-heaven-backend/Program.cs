@@ -3,20 +3,22 @@ using food_heaven_backend.Shared.Domain.Repositories;
 using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Domain.Repositories;
-using food_heaven_backend.PlanComidas.Application.CommandServices;
-using food_heaven_backend.PlanComidas.Application.QueryServices;
+using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
+using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
 using food_heaven_backend.PlanComidas.Infrastructure.Persistence.Repositories;
 using FluentValidation;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Domain.Model.Validators;
-using food_heaven_backend.FoodCatalogContext.Application.CommandServices;
-using food_heaven_backend.FoodCatalogContext.Application.QueryServices;
+using food_heaven_backend.FoodCatalogContext.Application.Internal.CommandServices;
+using food_heaven_backend.FoodCatalogContext.Application.Internal.QueryServices;
 using food_heaven_backend.FoodCatalogContext.Domain.Repositories;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Validators;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Infrastructure.Persistence.Repositories;
 using food_heaven_backend.Security.Application;
+using food_heaven_backend.Security.Application.Internal.CommandServices;
+using food_heaven_backend.Security.Application.Internal.QueryServices;
 using food_heaven_backend.Security.Domain.Repositories;
 using food_heaven_backend.Security.Domain.Service;
 using food_heaven_backend.Security.Infrastructure.Persistence.Repositories;
@@ -54,17 +56,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Registro de servicios de dominio y aplicación
-builder.Services.AddScoped<IProveedorCommandService, ProveedorCommandService>();
-builder.Services.AddScoped<IProveedorQueryService, ProveedorQueryService>();
-builder.Services.AddScoped<IComidaCommandService, ComidaCommandService>();
-builder.Services.AddScoped<IComidaQueryService, ComidaQueryService>();
-builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<IProveedorCommandService, ProveedorCommandServiceImpl>();
+builder.Services.AddScoped<IProveedorQueryService, ProveedorQueryServiceImpl>();
+builder.Services.AddScoped<IComidaCommandService, ComidaCommandServiceImpl>();
+builder.Services.AddScoped<IComidaQueryService, ComidaQueryServiceImpl>();
+builder.Services.AddScoped<IUserQueryService, UserQueryServiceImpl>();
 
 // Registro de repositorios
 builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<IComidaRepository, ComidaRepository>();
-builder.Services.AddScoped<IPlanComidaCommandService, PlanComidaCommandService>();
-builder.Services.AddScoped<IPlanComidaQueryService, PlanComidaQueryService>();
+builder.Services.AddScoped<IPlanComidaCommandService, PlanComidaCommandServiceImpl>();
+builder.Services.AddScoped<IPlanComidaQueryService, PlanComidaQueryServiceImpl>();
 builder.Services.AddScoped<IPlanComidaRepository, PlanComidaRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -73,7 +75,7 @@ builder.Services.AddScoped<IValidator<CreateProveedorCommand>, CreateProveedorCo
 builder.Services.AddScoped<IValidator<CreateComidaCommand>, CreateComidaCommandValidator>();
 builder.Services.AddScoped<IValidator<CreatePlanComidaCommand>, CreatePlanComidaCommandValidator>();
 
-builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserCommandService, UserCommandServiceImpl>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<IJwtEncryptService, JwtEncryptService>();

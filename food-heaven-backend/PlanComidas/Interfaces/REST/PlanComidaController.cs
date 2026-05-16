@@ -1,8 +1,8 @@
 using System.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using food_heaven_backend.PlanComidas.Application.CommandServices;
-using food_heaven_backend.PlanComidas.Application.QueryServices;
+using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
+using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;

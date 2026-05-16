@@ -6,9 +6,9 @@ using food_heaven_backend.PlanComidas.Domain.Repositories;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.Shared.Domain.Repositories;
 
-namespace food_heaven_backend.PlanComidas.Application.CommandServices;
+namespace food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
 
-public class PlanComidaCommandService(
+public class PlanComidaCommandServiceImpl(
     IPlanComidaRepository repository,
     IUnitOfWork unitOfWork,
     IValidator<CreatePlanComidaCommand> validator)

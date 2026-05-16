@@ -10,9 +10,9 @@ using System;
 using System.Threading.Tasks;
 using food_heaven_backend.Shared.Domain.Repositories;
 
-namespace food_heaven_backend.FoodCatalogContext.Application.CommandServices
+namespace food_heaven_backend.FoodCatalogContext.Application.Internal.CommandServices
 {
-    public class ProveedorCommandService(
+    public class ProveedorCommandServiceImpl(
         IProveedorRepository proveedorRepository,
         IUnitOfWork unitOfWork,
         IValidator<CreateProveedorCommand> validator)

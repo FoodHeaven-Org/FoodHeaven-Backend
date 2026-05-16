@@ -3,9 +3,9 @@ using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 
-namespace food_heaven_backend.FoodCatalogContext.Application.QueryServices
+namespace food_heaven_backend.FoodCatalogContext.Application.Internal.QueryServices
 {
-    public class ComidaQueryService(IComidaRepository comidaRepository) : IComidaQueryService
+    public class ComidaQueryServiceImpl(IComidaRepository comidaRepository) : IComidaQueryService
     {
         private readonly IComidaRepository _comidaRepository = comidaRepository ?? throw new ArgumentNullException(nameof(comidaRepository));
 

@@ -6,9 +6,9 @@ using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.Shared.Domain.Repositories;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 
-namespace food_heaven_backend.FoodCatalogContext.Application.CommandServices;
+namespace food_heaven_backend.FoodCatalogContext.Application.Internal.CommandServices;
 
-public class ComidaCommandService(
+public class ComidaCommandServiceImpl(
     IComidaRepository comidaRepository,
     IUnitOfWork unitOfWork,
     IValidator<CreateComidaCommand> validator)
