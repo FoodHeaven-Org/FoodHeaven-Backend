@@ -61,18 +61,18 @@ public static class FoodHeavenDataSeeder
     {
         var meals = new[]
         {
-            CreateMeal(1, "Avena con frutas", "Avena, platano y fresas", "/desayuno1.png", 360, 13, 58, 8, 1),
-            CreateMeal(2, "Tostada con palta y huevo", "Pan integral, palta y huevo", "/desayuno2.jpg", 420, 22, 40, 18, 1),
-            CreateMeal(3, "Bowl de yogurt", "Yogurt, granola y frutos rojos", "/desayuno3.png", 390, 24, 46, 10, 1),
-            CreateMeal(4, "Omelette de verduras", "Huevos, verduras salteadas y queso fresco", "/desayuno4%20(3).jpg", 410, 28, 18, 24, 1),
-            CreateMeal(5, "Pollo con quinoa", "Pechuga de pollo, quinoa y ensalada", "/almuerzo1%20(2).jpg", 620, 45, 58, 18, 2),
-            CreateMeal(6, "Lomo saltado balanceado", "Carne magra, papa al horno y arroz integral", "/almuerzo2%20(2).jpg", 680, 42, 72, 22, 2),
-            CreateMeal(7, "Bowl vegetariano", "Garbanzos, camote, verduras y tahini", "/almuerzo3%20(2).jpg", 560, 24, 76, 16, 2),
-            CreateMeal(8, "Pasta integral con pollo", "Pasta integral, pollo y verduras", "/almuerzo4%20(2).jpg", 640, 38, 82, 14, 2),
-            CreateMeal(9, "Salmon con verduras", "Salmon, brocoli y arroz jazmin", "/cena1%20(2).jpg", 590, 38, 44, 24, 3),
-            CreateMeal(10, "Wrap de pavo", "Tortilla integral, pavo y vegetales", "/cena2%20(2).png", 430, 31, 42, 13, 3),
-            CreateMeal(11, "Crema de verduras", "Crema ligera de verduras y tostadas integrales", "/cena3%20(2).jpg", 350, 12, 48, 9, 3),
-            CreateMeal(12, "Ensalada de pollo", "Pollo, hojas verdes, palta y semillas", "/cena4.jpg", 460, 36, 30, 20, 3)
+            CreateMeal(1, "Sandwich mixto con jugo", "Pan tostado con jamon, queso, cafe y jugo", "/desayuno1.png", 430, 21, 52, 15, 1),
+            CreateMeal(2, "Croissant de jamon y queso", "Croissant relleno con jamon y queso", "/desayuno2.jpg", 410, 17, 38, 21, 1),
+            CreateMeal(3, "Pan con chicharron y tamal", "Cerdo, camote, zarza criolla, tamal y cafe", "/desayuno3.png", 690, 34, 76, 28, 1),
+            CreateMeal(4, "Pan con asado y jugo", "Pan con carne, papas y jugo de fresa", "/desayuno4%20(3).jpg", 580, 30, 62, 22, 1),
+            CreateMeal(5, "Arroz con pollo", "Pollo, arroz verde y salsa criolla", "/almuerzo1%20(2).jpg", 720, 42, 82, 24, 2),
+            CreateMeal(6, "Lomo saltado clasico", "Carne salteada, arroz y papas doradas", "/almuerzo2%20(2).jpg", 760, 40, 88, 28, 2),
+            CreateMeal(7, "Aji de gallina", "Pollo en crema de aji amarillo con arroz", "/almuerzo3%20(2).jpg", 680, 33, 72, 27, 2),
+            CreateMeal(8, "Seco de res con frejoles", "Res guisada, frejoles, arroz y papa", "/almuerzo4%20(2).jpg", 790, 45, 90, 26, 2),
+            CreateMeal(9, "Ensalada de quinoa", "Quinoa, pepino, tomate y hierbas frescas", "/cena1%20(2).jpg", 430, 14, 54, 16, 3),
+            CreateMeal(10, "Sopa criolla con carne", "Caldo de tomate, fideos, carne y huevo", "/cena2%20(2).png", 520, 29, 50, 21, 3),
+            CreateMeal(11, "Filete de pescado", "Pescado a la plancha con ensalada", "/cena3%20(2).jpg", 390, 32, 18, 16, 3),
+            CreateMeal(12, "Tortilla de quinua", "Tortilla de quinua con ensalada criolla", "/cena4.jpg", 460, 24, 46, 18, 3)
         };
 
         foreach (var meal in meals)
