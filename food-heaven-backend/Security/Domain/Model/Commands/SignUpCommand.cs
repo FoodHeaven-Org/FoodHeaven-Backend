@@ -1,5 +1,7 @@
 namespace food_heaven_backend.Security.Domain.Model.Commands;
 
+using food_heaven_backend.Security.Domain.Model.ValueObjects;
+
 public record SignUpCommand
 {
     public string FullName { get; init; }
@@ -20,7 +22,7 @@ public record SignUpCommand
         FullName = string.IsNullOrWhiteSpace(fullName) ? CreateDisplayName(username) : fullName.Trim();
         Username = username;
         Password = password;
-        Subscription = subscription;
+        Subscription = UserSubscriptionPlan.NormalizeCode(subscription);
         Phone = phone;
         City = city;
     }
