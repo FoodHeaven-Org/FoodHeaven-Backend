@@ -12,7 +12,6 @@ public record UpdateComidaCommand
     public int Carbohidrato { get; init; }
     public int Grasa { get; init; }
     public int id_tipo_comida { get; init; }
-    public bool es_especial { get; init; }
 
     public UpdateComidaCommand(
         string nombre,
@@ -24,8 +23,7 @@ public record UpdateComidaCommand
         int proteina,
         int carbohidrato,
         int grasa,
-        int id_tipo_comida,
-        bool es_especial)
+        int id_tipo_comida)
     {
         if (string.IsNullOrWhiteSpace(nombre)) throw new ArgumentException("Nombre is required.", nameof(nombre));
         if (string.IsNullOrWhiteSpace(complemento)) throw new ArgumentException("Complemento is required.", nameof(complemento));
@@ -42,6 +40,5 @@ public record UpdateComidaCommand
         Carbohidrato = carbohidrato;
         Grasa = grasa;
         this.id_tipo_comida = id_tipo_comida;
-        this.es_especial = es_especial;
     }
 }

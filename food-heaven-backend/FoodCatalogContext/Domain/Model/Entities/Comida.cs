@@ -45,9 +45,6 @@ public class Comida : BaseEntity
     [ForeignKey(nameof(id_tipo_comida))]
     public TipoComida TipoComida { get; set; } = null!;
 
-    [Column("es_especial")]
-    public int es_especial { get; set; } // se usa como int en el mock API
-
     public Comida(
         string nombre,
         string complemento,
@@ -57,7 +54,6 @@ public class Comida : BaseEntity
         int carbo,
         int grasa,
         int idTipoComida,
-        int es_especial,
         string nombreEn = "",
         string complementoEn = "")
     {
@@ -71,7 +67,6 @@ public class Comida : BaseEntity
         Carbo = carbo;
         Grasa = grasa;
         id_tipo_comida = idTipoComida;
-        this.es_especial = es_especial;
     }
 
     public Comida() { }

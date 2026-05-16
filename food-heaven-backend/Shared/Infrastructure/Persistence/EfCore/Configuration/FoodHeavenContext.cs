@@ -79,10 +79,6 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                     .HasColumnName("grasa")
                     .IsRequired();
 
-                entity.Property(c => c.es_especial)
-                    .HasColumnName("es_especial")
-                    .IsRequired();
-
                 entity.Property(c => c.id_tipo_comida)
                     .HasColumnName("id_tipo_comida")
                     .IsRequired();
