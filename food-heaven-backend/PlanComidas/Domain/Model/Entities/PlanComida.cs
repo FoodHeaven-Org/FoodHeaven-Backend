@@ -17,10 +17,14 @@ public class PlanComida : BaseEntity
     public DateTime FechaFin { get; set; }
     
     [Column("lista_comidas")]
-    public int[] ListaComidas { get; set; }
+    public int[] ListaComidas { get; set; } = Array.Empty<int>();
 
     public PlanComida(int idUsuario, DateTime fechaInicio, DateTime fechaFin, int[] listaComidas)
     {
+        if (idUsuario <= 0) throw new ArgumentException("IdUsuario must be greater than zero.", nameof(idUsuario));
+        if (fechaFin <= fechaInicio) throw new ArgumentException("FechaFin must be after FechaInicio.", nameof(fechaFin));
+        if (listaComidas is not { Length: 21 }) throw new ArgumentException("ListaComidas must contain exactly 21 meal ids.", nameof(listaComidas));
+
         IdUsuario = idUsuario;
         FechaInicio = fechaInicio;
         FechaFin = fechaFin;
