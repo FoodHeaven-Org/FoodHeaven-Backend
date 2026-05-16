@@ -1,8 +1,8 @@
-﻿using food_heaven_backend.Security.Domain.Model.Commands;
-using food_heaven_backend.Security.Domain.Model.Entities;
+using food_heaven_backend.Security.Domain.Model.Commands;
 using food_heaven_backend.Security.Domain.Model.Exceptions;
 using food_heaven_backend.Security.Domain.Model.Queries;
 using food_heaven_backend.Security.Domain.Services;
+using food_heaven_backend.Security.Interfaces.Rest.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +24,7 @@ public class UserController : ControllerBase
 
     [HttpPost("sign-up")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(UserResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> SignUp([FromBody] SignUpCommand command)
@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         try
         {
             var user = await _userCommandService.Handle(command);
-            return Created(string.Empty, user);
+            return Created(string.Empty, UserResource.FromEntity(user));
         }
         catch (UsernameAlreadyTakenException ex)
         {
@@ -68,7 +68,7 @@ public class UserController : ControllerBase
 
     [HttpGet("{userId:int}")]
     [Authorize]
-    [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetUserById(int userId)
@@ -76,7 +76,7 @@ public class UserController : ControllerBase
         try
         {
             var user = await _userQueryService.Handle(new GetUserByIdQuery(userId));
-            return Ok(user);
+            return Ok(UserResource.FromEntity(user));
         }
         catch (KeyNotFoundException ex)
         {

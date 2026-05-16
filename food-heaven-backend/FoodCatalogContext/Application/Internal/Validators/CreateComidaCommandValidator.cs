@@ -1,7 +1,7 @@
 using FluentValidation;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 
-namespace food_heaven_backend.FoodCatalogContext.Domain.Model.Validators;
+namespace food_heaven_backend.FoodCatalogContext.Application.Internal.Validators;
 
 public class CreateComidaCommandValidator : AbstractValidator<CreateComidaCommand>
 {

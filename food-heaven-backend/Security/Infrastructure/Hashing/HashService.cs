@@ -1,4 +1,4 @@
-﻿using food_heaven_backend.Security.Domain.Services;
+using food_heaven_backend.Security.Domain.Services;
 
 namespace food_heaven_backend.Security.Infrastructure.Hashing;
 

@@ -5,21 +5,11 @@ namespace food_heaven_backend.FoodCatalogContext.Domain.Repositories;
 
 public interface IComidaRepository: IBaseRepository<Comida>
 {
-    //Listar comidas por el nombre
     Task<Comida?> FindByNameAsync(string name);
 
-    //Listar comidas por un tipo específico
-    
     Task<Comida?> FindComidaByIdAsync(int id);
 
     Task<IEnumerable<Comida>> ListByTipoComidaAsync(int idTipoComida);
 
-    //Task<IEnumerable<Comida>> ListSpecialComidasAsync();
-
-    //Task<IEnumerable<Comida>> ListByTipoComidaIdAsync(int tipoComidaId);
-
-
+    Task<bool> AllMealIdsExistAsync(IEnumerable<int> mealIds);
 }
-
-
-

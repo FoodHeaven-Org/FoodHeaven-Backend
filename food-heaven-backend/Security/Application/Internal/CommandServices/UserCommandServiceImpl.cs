@@ -1,4 +1,4 @@
-Ôªøusing food_heaven_backend.Security.Domain.Model.Commands;
+using food_heaven_backend.Security.Domain.Model.Commands;
 using food_heaven_backend.Security.Domain.Model.Entities;
 using food_heaven_backend.Security.Domain.Model.Exceptions;
 using food_heaven_backend.Security.Domain.Repositories;
@@ -24,7 +24,7 @@ public class UserCommandServiceImpl : IUserCommandService
 
     public async Task<User> Handle(SignUpCommand command)
     {
-        // Verificar si el nombre de usuario ya est√° registrado
+        // Verificar si el nombre de usuario ya est· registrado
         var existingUser = await _userRepository.GetByUsernameAsync(command.Username);
         if (existingUser != null)
             throw new UsernameAlreadyTakenException();
@@ -33,9 +33,9 @@ public class UserCommandServiceImpl : IUserCommandService
         var user = new User
         {
             Username = command.Username,
-            PasswordHashed = _hashService.HashPassword(command.Password), // Cifrar la contrase√±a
+            PasswordHashed = _hashService.HashPassword(command.Password), // Cifrar la contraseÒa
             Subscription = command.Subscription,
-            Phone = command.Phone,  // Asignar el tel√©fono
+            Phone = command.Phone,  // Asignar el telÈfono
             City = command.City     // Asignar la ciudad
         };
 
@@ -50,10 +50,10 @@ public class UserCommandServiceImpl : IUserCommandService
     {
         // Verificar si el usuario existe en la base de datos
         var user = await _userRepository.GetByUsernameAsync(command.Username);
-        if (user == null || !_hashService.VerifyPassword(command.Password, user.PasswordHashed))  // Verificar la contrase√±a
+        if (user == null || !_hashService.VerifyPassword(command.Password, user.PasswordHashed))  // Verificar la contraseÒa
             throw new InvalidCredentialsException();
 
-        // Generar el token JWT si las credenciales son v√°lidas
+        // Generar el token JWT si las credenciales son v·lidas
         var jwtToken = _jwtEncryptService.Encrypt(user);
 
         return jwtToken;
