@@ -30,6 +30,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var authKey = builder.Configuration["Auth:key"] ?? throw new InvalidOperationException("Auth:key configuration is required.");
+
 // Obtener cadena de conexiÃ³n
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -51,7 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Auth:key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authKey)),
             ClockSkew = TimeSpan.Zero // No permite desajustes de tiempo
         };
     });

@@ -1,4 +1,4 @@
-using food_heaven_backend.Security.Domain.Model.Commands;
+Ôªøusing food_heaven_backend.Security.Domain.Model.Commands;
 using food_heaven_backend.Security.Domain.Model.Entities;
 using food_heaven_backend.Security.Domain.Model.Exceptions;
 using food_heaven_backend.Security.Domain.Repositories;
@@ -24,8 +24,8 @@ public class UserCommandServiceImpl : IUserCommandService
 
     public async Task<User> Handle(SignUpCommand command)
     {
-        // Verificar si el nombre de usuario ya est· registrado
-        var existingUser = await _userRepository.GetByUsernamelAsync(command.Username);
+        // Verificar si el nombre de usuario ya est√° registrado
+        var existingUser = await _userRepository.GetByUsernameAsync(command.Username);
         if (existingUser != null)
             throw new UsernameAlreadyTakenException();
 
@@ -33,9 +33,9 @@ public class UserCommandServiceImpl : IUserCommandService
         var user = new User
         {
             Username = command.Username,
-            PasswordHashed = _hashService.HashPassword(command.Password), // Cifrar la contraseÒa
+            PasswordHashed = _hashService.HashPassword(command.Password), // Cifrar la contrase√±a
             Subscription = command.Subscription,
-            Phone = command.Phone,  // Asignar el telÈfono
+            Phone = command.Phone,  // Asignar el tel√©fono
             City = command.City     // Asignar la ciudad
         };
 
@@ -49,11 +49,11 @@ public class UserCommandServiceImpl : IUserCommandService
     public async Task<string> Handle(LoginCommand command)
     {
         // Verificar si el usuario existe en la base de datos
-        var user = await _userRepository.GetByUsernamelAsync(command.Username);
-        if (user == null || !_hashService.VerifyPassword(command.Password, user.PasswordHashed))  // Verificar la contraseÒa
+        var user = await _userRepository.GetByUsernameAsync(command.Username);
+        if (user == null || !_hashService.VerifyPassword(command.Password, user.PasswordHashed))  // Verificar la contrase√±a
             throw new InvalidCredentialsException();
 
-        // Generar el token JWT si las credenciales son v·lidas
+        // Generar el token JWT si las credenciales son v√°lidas
         var jwtToken = _jwtEncryptService.Encrypt(user);
 
         return jwtToken;

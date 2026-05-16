@@ -6,10 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace food_heaven_backend.Security.Infrastructure.Persistence.Repositories;
 
-public class UserRepository(FoodHeavenContext context) : BaseRepository<User>(context), IUserRepository
+public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public async Task<User?> GetByUsernamelAsync(string username)
+    public UserRepository(FoodHeavenContext context) : base(context)
     {
-        return await context.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
+    }
+
+    public async Task<User?> GetByUsernameAsync(string username)
+    {
+        return await Context.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
     }
 }
