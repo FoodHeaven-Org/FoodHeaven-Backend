@@ -87,4 +87,80 @@ public class UserController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", detail = ex.Message });
         }
     }
+
+    [HttpPut("{userId:int}/profile")]
+    [Authorize]
+    [ProducesResponseType(typeof(UserResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> UpdateProfile(int userId, [FromBody] UpdateUserProfileCommand command)
+    {
+        try
+        {
+            var user = await _userCommandService.Handle(command, userId);
+            return Ok(UserResource.FromEntity(user));
+        }
+        catch (UsernameAlreadyTakenException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return UnprocessableEntity(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("{userId:int}/subscription")]
+    [Authorize]
+    [ProducesResponseType(typeof(UserResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> ChangeSubscription(int userId, [FromBody] ChangeUserSubscriptionCommand command)
+    {
+        try
+        {
+            var user = await _userCommandService.Handle(command, userId);
+            return Ok(UserResource.FromEntity(user));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return UnprocessableEntity(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("{userId:int}/password")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> ChangePassword(int userId, [FromBody] ChangeUserPasswordCommand command)
+    {
+        try
+        {
+            await _userCommandService.Handle(command, userId);
+            return NoContent();
+        }
+        catch (InvalidCredentialsException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return UnprocessableEntity(new { message = ex.Message });
+        }
+    }
 }

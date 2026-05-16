@@ -16,4 +16,9 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
         return await Context.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
     }
+
+    public async Task<User?> GetByUsernameExceptIdAsync(string username, int userId)
+    {
+        return await Context.Set<User>().FirstOrDefaultAsync(u => u.Username == username && u.Id != userId);
+    }
 }
