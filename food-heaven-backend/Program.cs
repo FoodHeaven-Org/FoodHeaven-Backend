@@ -67,8 +67,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 // Registro de servicios de dominio y aplicación
-builder.Services.AddScoped<IProveedorCommandService, ProveedorCommandServiceImpl>();
-builder.Services.AddScoped<IProveedorQueryService, ProveedorQueryServiceImpl>();
 builder.Services.AddScoped<IComidaCommandService, ComidaCommandServiceImpl>();
 builder.Services.AddScoped<IComidaQueryService, ComidaQueryServiceImpl>();
 builder.Services.AddScoped<IFoodCatalogContextFacade, FoodCatalogContextFacadeImpl>();
@@ -76,7 +74,6 @@ builder.Services.AddScoped<ISecurityContextFacade, SecurityContextFacadeImpl>();
 builder.Services.AddScoped<IUserQueryService, UserQueryServiceImpl>();
 
 // Registro de repositorios
-builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<IComidaRepository, ComidaRepository>();
 builder.Services.AddScoped<IPlanComidaCommandService, PlanComidaCommandServiceImpl>();
 builder.Services.AddScoped<IPlanComidaQueryService, PlanComidaQueryServiceImpl>();
@@ -86,7 +83,6 @@ builder.Services.AddScoped<IPlanComidaRepository, PlanComidaRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Registro de validadores
-builder.Services.AddScoped<IValidator<CreateProveedorCommand>, CreateProveedorCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateComidaCommand>, CreateComidaCommandValidator>();
 builder.Services.AddScoped<IValidator<CreatePlanComidaCommand>, CreatePlanComidaCommandValidator>();
 
