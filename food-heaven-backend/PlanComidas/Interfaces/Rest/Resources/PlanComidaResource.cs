@@ -1,4 +1,4 @@
-namespace food_heaven_backend.PlanComidas.Interfaces.REST.Resources;
+namespace food_heaven_backend.PlanComidas.Interfaces.Rest.Resources;
 
 public record PlanComidaResource(
     int Id,

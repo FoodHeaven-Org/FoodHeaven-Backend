@@ -6,9 +6,9 @@ using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;
-using food_heaven_backend.PlanComidas.Interfaces.REST.Transform;
+using food_heaven_backend.PlanComidas.Interfaces.Rest.Transform;
 
-namespace food_heaven_backend.PlanComidas.Interfaces.REST;
+namespace food_heaven_backend.PlanComidas.Interfaces.Rest;
 
 [Route("api/v1/[controller]")]
 [ApiController]

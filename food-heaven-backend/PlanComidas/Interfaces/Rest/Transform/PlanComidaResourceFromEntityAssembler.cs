@@ -1,7 +1,7 @@
 using food_heaven_backend.PlanComidas.Domain.Model.Entities;
-using food_heaven_backend.PlanComidas.Interfaces.REST.Resources;
+using food_heaven_backend.PlanComidas.Interfaces.Rest.Resources;
 
-namespace food_heaven_backend.PlanComidas.Interfaces.REST.Transform;
+namespace food_heaven_backend.PlanComidas.Interfaces.Rest.Transform;
 
 public static class PlanComidaResourceFromEntityAssembler
 {

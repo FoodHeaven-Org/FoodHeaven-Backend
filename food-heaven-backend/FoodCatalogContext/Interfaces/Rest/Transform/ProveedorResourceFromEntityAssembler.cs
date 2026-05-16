@@ -1,7 +1,7 @@
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
-using food_heaven_backend.FoodCatalogContext.Interfaces.REST.Resources;
+using food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Resources;
 
-namespace food_heaven_backend.FoodCatalogContext.Interfaces.REST.Transform;
+namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Transform;
 
 public class ProveedorResourceFromEntityAssembler
 {

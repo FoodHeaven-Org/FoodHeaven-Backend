@@ -5,7 +5,7 @@ using food_heaven_backend.Security.Domain.Model.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace food_heaven_backend.Security.Presentation.REST
+namespace food_heaven_backend.Security.Interfaces.Rest
 {
     [ApiController]
     public class UserController : ControllerBase

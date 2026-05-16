@@ -1,4 +1,4 @@
-namespace food_heaven_backend.FoodCatalogContext.Interfaces.REST.Resources;
+namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Resources;
 
 public record ComidaResource(
     int id_comida,
