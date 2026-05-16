@@ -20,6 +20,7 @@ using food_heaven_backend.FoodCatalogContext.Application.Internal.Validators;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Infrastructure.Persistence.EfCore.Repositories;
 using food_heaven_backend.FoodCatalogContext.Interfaces.Acl;
+using food_heaven_backend.Security.Application.Acl;
 using food_heaven_backend.Security.Application.Internal.CommandServices;
 using food_heaven_backend.Security.Application.Internal.QueryServices;
 using food_heaven_backend.Security.Domain.Repositories;
@@ -27,6 +28,7 @@ using food_heaven_backend.Security.Domain.Services;
 using food_heaven_backend.Security.Infrastructure.Hashing;
 using food_heaven_backend.Security.Infrastructure.Tokens;
 using food_heaven_backend.Security.Infrastructure.Persistence.EfCore.Repositories;
+using food_heaven_backend.Security.Interfaces.Acl;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -70,6 +72,7 @@ builder.Services.AddScoped<IProveedorQueryService, ProveedorQueryServiceImpl>();
 builder.Services.AddScoped<IComidaCommandService, ComidaCommandServiceImpl>();
 builder.Services.AddScoped<IComidaQueryService, ComidaQueryServiceImpl>();
 builder.Services.AddScoped<IFoodCatalogContextFacade, FoodCatalogContextFacadeImpl>();
+builder.Services.AddScoped<ISecurityContextFacade, SecurityContextFacadeImpl>();
 builder.Services.AddScoped<IUserQueryService, UserQueryServiceImpl>();
 
 // Registro de repositorios
@@ -78,6 +81,7 @@ builder.Services.AddScoped<IComidaRepository, ComidaRepository>();
 builder.Services.AddScoped<IPlanComidaCommandService, PlanComidaCommandServiceImpl>();
 builder.Services.AddScoped<IPlanComidaQueryService, PlanComidaQueryServiceImpl>();
 builder.Services.AddScoped<ExternalFoodCatalogService>();
+builder.Services.AddScoped<ExternalUserSubscriptionService>();
 builder.Services.AddScoped<IPlanComidaRepository, PlanComidaRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
