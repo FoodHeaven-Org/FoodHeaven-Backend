@@ -30,8 +30,8 @@ public class PlanComida : BaseEntity
         if (idUsuario <= 0) throw new ArgumentException("IdUsuario must be greater than zero.", nameof(idUsuario));
         if (fechaInicio == default) throw new ArgumentException("FechaInicio is required.", nameof(fechaInicio));
         if (fechaFin <= fechaInicio) throw new ArgumentException("FechaFin must be after FechaInicio.", nameof(fechaFin));
-        if (listaComidas is not { Length: 21 }) throw new ArgumentException("ListaComidas must contain exactly 21 meal ids.", nameof(listaComidas));
-        if (listaComidas.Any(id => id <= 0)) throw new ArgumentException("ListaComidas can only contain positive meal ids.", nameof(listaComidas));
+        if (listaComidas is not { Length: 21 }) throw new ArgumentException("ListaComidas must contain exactly 21 meal slots.", nameof(listaComidas));
+        if (listaComidas.Any(id => id < 0)) throw new ArgumentException("ListaComidas cannot contain negative meal ids.", nameof(listaComidas));
 
         IdUsuario = idUsuario;
         FechaInicio = fechaInicio;

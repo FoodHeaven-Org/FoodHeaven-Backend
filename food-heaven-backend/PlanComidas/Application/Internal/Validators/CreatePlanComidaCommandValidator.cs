@@ -22,7 +22,7 @@ public class CreatePlanComidaCommandValidator : AbstractValidator<CreatePlanComi
             .WithMessage("The weekly plan must contain exactly 21 meal slots.");
 
         RuleForEach(p => p.ListaComidas)
-            .GreaterThan(0)
-            .WithMessage("Each meal slot must reference a positive meal ID.");
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("Each meal slot must be empty or reference a positive meal ID.");
     }
 }
