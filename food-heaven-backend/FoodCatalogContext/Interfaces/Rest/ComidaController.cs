@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
@@ -17,6 +18,7 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     [Produces("application/json")]
     public class ComidaController(IComidaQueryService comidaQueryService, IComidaCommandService comidaCommandService) : ControllerBase
     {
