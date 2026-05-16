@@ -59,19 +59,42 @@ public static class FoodHeavenDataSeeder
 
     private static async Task SeedMealsAsync(FoodHeavenContext context)
     {
-        if (await context.Comidas.AnyAsync()) return;
+        var meals = new[]
+        {
+            CreateMeal(1, "Avena con frutas", "Avena, platano y fresas", "/desayuno1.png", 360, 13, 58, 8, 1),
+            CreateMeal(2, "Tostada con palta y huevo", "Pan integral, palta y huevo", "/desayuno2.jpg", 420, 22, 40, 18, 1),
+            CreateMeal(3, "Bowl de yogurt", "Yogurt, granola y frutos rojos", "/desayuno3.png", 390, 24, 46, 10, 1),
+            CreateMeal(4, "Omelette de verduras", "Huevos, verduras salteadas y queso fresco", "/desayuno4%20(3).jpg", 410, 28, 18, 24, 1),
+            CreateMeal(5, "Pollo con quinoa", "Pechuga de pollo, quinoa y ensalada", "/almuerzo1%20(2).jpg", 620, 45, 58, 18, 2),
+            CreateMeal(6, "Lomo saltado balanceado", "Carne magra, papa al horno y arroz integral", "/almuerzo2%20(2).jpg", 680, 42, 72, 22, 2),
+            CreateMeal(7, "Bowl vegetariano", "Garbanzos, camote, verduras y tahini", "/almuerzo3%20(2).jpg", 560, 24, 76, 16, 2),
+            CreateMeal(8, "Pasta integral con pollo", "Pasta integral, pollo y verduras", "/almuerzo4%20(2).jpg", 640, 38, 82, 14, 2),
+            CreateMeal(9, "Salmon con verduras", "Salmon, brocoli y arroz jazmin", "/cena1%20(2).jpg", 590, 38, 44, 24, 3),
+            CreateMeal(10, "Wrap de pavo", "Tortilla integral, pavo y vegetales", "/cena2%20(2).png", 430, 31, 42, 13, 3),
+            CreateMeal(11, "Crema de verduras", "Crema ligera de verduras y tostadas integrales", "/cena3%20(2).jpg", 350, 12, 48, 9, 3),
+            CreateMeal(12, "Ensalada de pollo", "Pollo, hojas verdes, palta y semillas", "/cena4.jpg", 460, 36, 30, 20, 3)
+        };
 
-        context.Comidas.AddRange(
-            CreateMeal(1, "Avena con frutas", "Avena, platano y fresas", "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?auto=format&fit=crop&w=900&q=80", 360, 13, 58, 8, 1),
-            CreateMeal(2, "Pan integral con huevo", "Pan integral, huevo y palta", "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80", 420, 22, 40, 18, 1),
-            CreateMeal(3, "Yogurt protein bowl", "Yogurt, granola y arandanos", "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=900&q=80", 390, 24, 46, 10, 1),
-            CreateMeal(4, "Pollo con quinoa", "Pechuga de pollo, quinoa y ensalada", "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80", 620, 45, 58, 18, 2),
-            CreateMeal(5, "Lomo saltado balanceado", "Carne magra, papa al horno y arroz integral", "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80", 680, 42, 72, 22, 2),
-            CreateMeal(6, "Bowl vegetariano", "Garbanzos, camote, verduras y tahini", "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80", 560, 24, 76, 16, 2),
-            CreateMeal(7, "Salmon con verduras", "Salmon, brocoli y arroz jazmin", "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=900&q=80", 590, 38, 44, 24, 3),
-            CreateMeal(8, "Wrap de pavo", "Tortilla integral, pavo y vegetales", "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80", 430, 31, 42, 13, 3),
-            CreateMeal(9, "Crema de verduras", "Crema ligera de verduras y tostadas integrales", "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80", 350, 12, 48, 9, 3)
-        );
+        foreach (var meal in meals)
+        {
+            var existingMeal = await context.Comidas.FindAsync(meal.Id);
+            if (existingMeal == null)
+            {
+                context.Comidas.Add(meal);
+                continue;
+            }
+
+            existingMeal.Nombre = meal.Nombre;
+            existingMeal.Complemento = meal.Complemento;
+            existingMeal.Url = meal.Url;
+            existingMeal.Cal = meal.Cal;
+            existingMeal.Prote = meal.Prote;
+            existingMeal.Carbo = meal.Carbo;
+            existingMeal.Grasa = meal.Grasa;
+            existingMeal.Id_Proveedor = meal.Id_Proveedor;
+            existingMeal.id_tipo_comida = meal.id_tipo_comida;
+            existingMeal.es_especial = meal.es_especial;
+        }
 
         await context.SaveChangesAsync();
     }

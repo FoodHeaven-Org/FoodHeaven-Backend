@@ -10,7 +10,14 @@ public class ExternalFoodCatalogService(IFoodCatalogContextFacade foodCatalogCon
     {
         ArgumentNullException.ThrowIfNull(mealIds);
 
-        if (!await _foodCatalogContextFacade.MealIdsExistAsync(mealIds))
+        var selectedMealIds = mealIds
+            .Where(id => id > 0)
+            .Distinct()
+            .ToArray();
+
+        if (selectedMealIds.Length == 0) return;
+
+        if (!await _foodCatalogContextFacade.MealIdsExistAsync(selectedMealIds))
         {
             throw new ArgumentException("The meal plan contains meals that do not exist in the food catalog.", nameof(mealIds));
         }

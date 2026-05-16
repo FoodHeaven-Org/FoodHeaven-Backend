@@ -36,7 +36,7 @@ public class ComidaRepository(FoodHeavenContext context)
             .Distinct()
             .ToArray();
 
-        if (distinctMealIds.Length == 0) return false;
+        if (distinctMealIds.Length == 0) return true;
 
         var existingMealIdsCount = await Context.Set<Comida>()
             .Where(c => distinctMealIds.Contains(c.Id))
