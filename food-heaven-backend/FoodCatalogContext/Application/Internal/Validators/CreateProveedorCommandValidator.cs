@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 
 namespace food_heaven_backend.FoodCatalogContext.Application.Internal.Validators;

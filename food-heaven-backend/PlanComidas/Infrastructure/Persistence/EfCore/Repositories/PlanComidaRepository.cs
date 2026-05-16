@@ -1,10 +1,10 @@
 using food_heaven_backend.PlanComidas.Domain.Model.Entities;
 using food_heaven_backend.PlanComidas.Domain.Repositories;
-using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
-using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
+using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configuration;
+using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace food_heaven_backend.PlanComidas.Infrastructure.Persistence.Repositories;
+namespace food_heaven_backend.PlanComidas.Infrastructure.Persistence.EfCore.Repositories;
 
 public class PlanComidaRepository(FoodHeavenContext context)
     : BaseRepository<PlanComida>(context), IPlanComidaRepository

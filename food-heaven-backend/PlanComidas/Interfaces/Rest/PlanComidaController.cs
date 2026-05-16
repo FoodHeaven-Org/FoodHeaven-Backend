@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
@@ -37,7 +37,7 @@ public class PlanComidaController(
         var result = await queryService.Handle(new GetPlanComidaByUserIdQuery(id));
         return result.Any()
             ? Ok(result.Select(PlanComidaResource.FromEntity))
-            : NotFound($"No se encontrÃ³ ningÃºn plan con el UserID {id}.");
+            : NotFound($"No se encontró ningún plan con el UserID {id}.");
     }
 
     [HttpPost]

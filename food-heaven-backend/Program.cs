@@ -1,11 +1,11 @@
-﻿using food_heaven_backend.Shared.Infrastructure.Persistence.Configuration;
+using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configuration;
 using food_heaven_backend.Shared.Domain.Repositories;
-using food_heaven_backend.Shared.Infrastructure.Persistence.Repositories;
+using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Repositories;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Domain.Repositories;
 using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
 using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
-using food_heaven_backend.PlanComidas.Infrastructure.Persistence.Repositories;
+using food_heaven_backend.PlanComidas.Infrastructure.Persistence.EfCore.Repositories;
 using FluentValidation;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Application.Internal.Validators;
@@ -15,14 +15,14 @@ using food_heaven_backend.FoodCatalogContext.Domain.Repositories;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 using food_heaven_backend.FoodCatalogContext.Application.Internal.Validators;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
-using food_heaven_backend.FoodCatalogContext.Infrastructure.Persistence.Repositories;
+using food_heaven_backend.FoodCatalogContext.Infrastructure.Persistence.EfCore.Repositories;
 using food_heaven_backend.Security.Application.Internal.CommandServices;
 using food_heaven_backend.Security.Application.Internal.QueryServices;
 using food_heaven_backend.Security.Domain.Repositories;
 using food_heaven_backend.Security.Domain.Services;
 using food_heaven_backend.Security.Infrastructure.Hashing;
 using food_heaven_backend.Security.Infrastructure.Tokens;
-using food_heaven_backend.Security.Infrastructure.Persistence.Repositories;
+using food_heaven_backend.Security.Infrastructure.Persistence.EfCore.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -46,7 +46,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ConfiguraciÃ³n de autenticaciÃ³n JWT
+// Configuración de autenticación JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -60,7 +60,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Registro de servicios de dominio y aplicaciÃ³n
+// Registro de servicios de dominio y aplicación
 builder.Services.AddScoped<IProveedorCommandService, ProveedorCommandServiceImpl>();
 builder.Services.AddScoped<IProveedorQueryService, ProveedorQueryServiceImpl>();
 builder.Services.AddScoped<IComidaCommandService, ComidaCommandServiceImpl>();
@@ -85,7 +85,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<IJwtEncryptService, JwtEncryptService>();
 
-// ConfiguraciÃ³n de CORS
+// Configuración de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -98,7 +98,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Build de la aplicaciÃ³n
+// Build de la aplicación
 var app = builder.Build();
 
 // Middleware pipeline
@@ -109,8 +109,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Se asegura que la base de datos estÃ© creada
-// Intentar crear la base de datos solo si la conexiÃ³n existe
+// Se asegura que la base de datos esté creada
+// Intentar crear la base de datos solo si la conexión existe
 try
 {
     using var scope = app.Services.CreateScope();
@@ -122,11 +122,11 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"[WARN] La base de datos no estÃ¡ disponible aÃºn: {ex.Message}");
+    Console.WriteLine($"[WARN] La base de datos no está disponible aún: {ex.Message}");
 }
 
 
-// Redirigir la raÃ­z '/' a Swagger
+// Redirigir la raíz '/' a Swagger
 app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/")
@@ -140,8 +140,8 @@ app.Use(async (context, next) =>
 // Aplicar CORS
 app.UseCors("AllowSpecificOrigin");
 
-// Middleware de autenticaciÃ³n y autorizaciÃ³n
-app.UseAuthentication(); // Usa el esquema de autenticaciÃ³n configurado
+// Middleware de autenticación y autorización
+app.UseAuthentication(); // Usa el esquema de autenticación configurado
 app.UseAuthorization();
 
 app.UseHttpsRedirection();

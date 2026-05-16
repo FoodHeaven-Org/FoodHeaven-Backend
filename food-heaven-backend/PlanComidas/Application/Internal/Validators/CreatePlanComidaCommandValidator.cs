@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 
 namespace food_heaven_backend.PlanComidas.Application.Internal.Validators;
@@ -8,7 +8,7 @@ public class CreatePlanComidaCommandValidator : AbstractValidator<CreatePlanComi
     public CreatePlanComidaCommandValidator()
     {
         RuleFor(p => p.IdUsuario)
-            .GreaterThan(0).WithMessage("ID de usuario invÃ¡lido.");
+            .GreaterThan(0).WithMessage("ID de usuario inválido.");
 
         RuleFor(p => p.FechaInicio)
             .NotEmpty().WithMessage("La fecha de inicio es obligatoria.");

@@ -1,4 +1,4 @@
-ï»¿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using food_heaven_backend.Security.Domain.Model.Entities;
@@ -21,7 +21,7 @@ namespace food_heaven_backend.Security.Infrastructure.Tokens
 
         public string Encrypt(User user)
         {
-            // Agregar mÃ¡s claims segÃºn los campos de la entidad User
+            // Agregar más claims según los campos de la entidad User
             var claims = new[]
             {
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),  // User ID

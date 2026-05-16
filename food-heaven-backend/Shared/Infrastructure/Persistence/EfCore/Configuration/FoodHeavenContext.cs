@@ -3,7 +3,7 @@ using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
 using food_heaven_backend.PlanComidas.Domain.Model.Entities;
 using food_heaven_backend.Security.Domain.Model.Entities;
 
-namespace food_heaven_backend.Shared.Infrastructure.Persistence.Configuration
+namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configuration
 {
     public class FoodHeavenContext(DbContextOptions options) : DbContext(options)
     {
