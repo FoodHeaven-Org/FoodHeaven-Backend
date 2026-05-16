@@ -1,4 +1,4 @@
-﻿public class CreateComidaCommand
+public class CreateComidaCommand
 {
     public string Nombre { get; init; }
     public string Complemento { get; init; }

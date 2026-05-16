@@ -1,4 +1,4 @@
-﻿namespace food_heaven_backend.Security.Domain.Exceptions;
+namespace food_heaven_backend.Security.Domain.Exceptions;
 
 public class UsernameAlreadyTakenException : Exception
 {

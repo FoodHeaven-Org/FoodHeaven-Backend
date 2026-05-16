@@ -1,4 +1,4 @@
-﻿namespace food_heaven_backend.Security.Domain.Service;
+namespace food_heaven_backend.Security.Domain.Service;
 
 public interface IHashService
 {

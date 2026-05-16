@@ -1,4 +1,4 @@
-﻿using food_heaven_backend.Security.Domain.Service;
+using food_heaven_backend.Security.Domain.Service;
 using Org.BouncyCastle.Crypto.Generators;
 
 namespace food_heaven_backend.Security.Application;

@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
+using System.Runtime.InteropServices.JavaScript;
 using food_heaven_backend.Shared.Domain.Model.Entities;
 
 namespace food_heaven_backend.Security.Domain.Entities;
