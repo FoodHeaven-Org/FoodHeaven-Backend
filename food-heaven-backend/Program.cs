@@ -169,6 +169,8 @@ static async Task EnsureLocalUserProfileSchemaAsync(FoodHeavenContext context)
         await EnsureColumnAsync(context, "user", "full_name", "TEXT NOT NULL DEFAULT ''");
         await EnsureColumnAsync(context, "user", "address", "TEXT NOT NULL DEFAULT ''");
         await EnsureColumnAsync(context, "user", "payment_method", "TEXT NOT NULL DEFAULT ''");
+        await EnsureColumnAsync(context, "Comida", "nombre_en", "TEXT NOT NULL DEFAULT ''");
+        await EnsureColumnAsync(context, "Comida", "complemento_en", "TEXT NOT NULL DEFAULT ''");
     }
     finally
     {
@@ -196,6 +198,7 @@ static async Task EnsureColumnAsync(FoodHeavenContext context, string tableName,
 
     if (!hasColumn)
     {
-        await context.Database.ExecuteSqlRawAsync($"ALTER TABLE \"{tableName}\" ADD COLUMN {columnName} {definition}");
+        var sql = "ALTER TABLE \"" + tableName + "\" ADD COLUMN " + columnName + " " + definition;
+        await context.Database.ExecuteSqlRawAsync(sql);
     }
 }

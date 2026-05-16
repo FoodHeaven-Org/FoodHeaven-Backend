@@ -3,7 +3,9 @@ namespace food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 public record UpdateComidaCommand
 {
     public string Nombre { get; init; }
+    public string NombreEn { get; init; }
     public string Complemento { get; init; }
+    public string ComplementoEn { get; init; }
     public string Url { get; init; }
     public int Calorias { get; init; }
     public int Proteina { get; init; }
@@ -15,7 +17,9 @@ public record UpdateComidaCommand
 
     public UpdateComidaCommand(
         string nombre,
+        string? nombreEn,
         string complemento,
+        string? complementoEn,
         string url,
         int calorias,
         int proteina,
@@ -32,7 +36,9 @@ public record UpdateComidaCommand
         if (id_proveedor <= 0) throw new ArgumentException("id_proveedor must be greater than zero.", nameof(id_proveedor));
 
         Nombre = nombre;
+        NombreEn = nombreEn?.Trim() ?? string.Empty;
         Complemento = complemento;
+        ComplementoEn = complementoEn?.Trim() ?? string.Empty;
         Url = url;
         Calorias = calorias;
         Proteina = proteina;

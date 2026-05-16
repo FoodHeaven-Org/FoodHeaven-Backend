@@ -39,7 +39,9 @@ public class ComidaCommandServiceImpl(
             grasa: command.Grasa,
             idProveedor: command.Id_proveedor,
             idTipoComida: command.id_tipo_comida,
-            es_especial: command.es_especial ? 1 : 0
+            es_especial: command.es_especial ? 1 : 0,
+            nombreEn: command.NombreEn,
+            complementoEn: command.ComplementoEn
         );
 
         try
@@ -76,7 +78,9 @@ public class ComidaCommandServiceImpl(
             throw new DataException("Comida no encontrada.");
 
         comida.Nombre = command.Nombre;
+        comida.NombreEn = command.NombreEn;
         comida.Complemento = command.Complemento;
+        comida.ComplementoEn = command.ComplementoEn;
         comida.Url = command.Url;
         comida.Cal = command.Calorias;
         comida.Prote = command.Proteina;

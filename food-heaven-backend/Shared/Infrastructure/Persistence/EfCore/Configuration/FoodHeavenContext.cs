@@ -73,8 +73,18 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(c => c.NombreEn)
+                    .HasColumnName("nombre_en")
+                    .IsRequired()
+                    .HasMaxLength(100);
+
                 entity.Property(c => c.Complemento)
                     .HasColumnName("complemento")
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(c => c.ComplementoEn)
+                    .HasColumnName("complemento_en")
                     .IsRequired()
                     .HasMaxLength(255);
 
