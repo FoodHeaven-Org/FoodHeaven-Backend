@@ -1,6 +1,7 @@
 using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configuration;
 using food_heaven_backend.Shared.Domain.Repositories;
 using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Repositories;
+using food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Seed;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Domain.Repositories;
 using food_heaven_backend.PlanComidas.Application.Internal.CommandServices;
@@ -122,7 +123,8 @@ try
     var context = scope.ServiceProvider.GetRequiredService<FoodHeavenContext>();
     if (!string.IsNullOrWhiteSpace(context.Database.GetConnectionString()))
     {
-        context.Database.EnsureCreated();
+        await context.Database.EnsureCreatedAsync();
+        await FoodHeavenDataSeeder.SeedAsync(context);
     }
 }
 catch (Exception ex)
