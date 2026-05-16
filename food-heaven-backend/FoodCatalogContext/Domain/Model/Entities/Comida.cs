@@ -45,6 +45,9 @@ public class Comida : BaseEntity
     [ForeignKey(nameof(id_tipo_comida))]
     public TipoComida TipoComida { get; set; } = null!;
 
+    [Column("es_especial")]
+    public int CatalogFeatureFlag { get; set; } = 0;
+
     public Comida(
         string nombre,
         string complemento,

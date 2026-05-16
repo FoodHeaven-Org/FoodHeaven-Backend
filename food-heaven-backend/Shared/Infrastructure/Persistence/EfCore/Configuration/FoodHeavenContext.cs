@@ -83,6 +83,10 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                     .HasColumnName("id_tipo_comida")
                     .IsRequired();
 
+                entity.Property(c => c.CatalogFeatureFlag)
+                    .HasColumnName("es_especial")
+                    .IsRequired();
+
                 entity.Property(c => c.CatalogSourceId)
                     .HasColumnName("id_proveedor")
                     .IsRequired();
