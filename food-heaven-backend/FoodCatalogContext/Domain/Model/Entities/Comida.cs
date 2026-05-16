@@ -56,7 +56,7 @@ public class Comida : BaseEntity
         Grasa = grasa;
         Id_Proveedor = idProveedor;
         id_tipo_comida = idTipoComida;
-        es_especial = es_especial;
+        this.es_especial = es_especial;
     }
 
     public Comida() { }
