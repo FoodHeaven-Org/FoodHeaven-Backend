@@ -1,12 +1,12 @@
-namespace food_heaven_backend.FoodCatalogContext.Domain.Model.Commands
-{
-    public class DeleteProveedorCommand
-    {
-        public int Id { get; init; }
+namespace food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 
-        public DeleteProveedorCommand(int id)
-        {
-            Id = id;
-        }
+public record DeleteProveedorCommand
+{
+    public int Id { get; init; }
+
+    public DeleteProveedorCommand(int id)
+    {
+        if (id <= 0) throw new ArgumentException("Id must be greater than zero.", nameof(id));
+        Id = id;
     }
 }

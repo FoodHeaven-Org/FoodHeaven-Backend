@@ -1,4 +1,6 @@
-public class CreateComidaCommand
+namespace food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
+
+public record CreateComidaCommand
 {
     public string Nombre { get; init; }
     public string Complemento { get; init; }
@@ -23,6 +25,12 @@ public class CreateComidaCommand
         int id_proveedor,
         bool es_especial)
     {
+        if (string.IsNullOrWhiteSpace(nombre)) throw new ArgumentException("Nombre is required.", nameof(nombre));
+        if (string.IsNullOrWhiteSpace(complemento)) throw new ArgumentException("Complemento is required.", nameof(complemento));
+        if (string.IsNullOrWhiteSpace(url)) throw new ArgumentException("Url is required.", nameof(url));
+        if (id_tipo_comida <= 0) throw new ArgumentException("id_tipo_comida must be greater than zero.", nameof(id_tipo_comida));
+        if (id_proveedor <= 0) throw new ArgumentException("id_proveedor must be greater than zero.", nameof(id_proveedor));
+
         Nombre = nombre;
         Complemento = complemento;
         Url = url;
