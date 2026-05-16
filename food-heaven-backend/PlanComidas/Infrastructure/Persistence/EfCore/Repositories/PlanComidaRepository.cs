@@ -34,4 +34,13 @@ public class PlanComidaRepository(FoodHeavenContext context)
 
         return await query.AnyAsync();
     }
+
+    public async Task RemoveByUserIdAsync(int userId)
+    {
+        var plans = await Context.Set<PlanComida>()
+            .Where(plan => plan.IdUsuario == userId)
+            .ToListAsync();
+
+        Context.Set<PlanComida>().RemoveRange(plans);
+    }
 }

@@ -12,4 +12,5 @@ public interface IPlanComidaRepository : IBaseRepository<PlanComida>
         DateTime startDate,
         DateTime endDate,
         int? excludedPlanId = null);
+    Task RemoveByUserIdAsync(int userId);
 }

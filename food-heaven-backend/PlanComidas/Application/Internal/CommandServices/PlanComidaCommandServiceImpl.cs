@@ -58,11 +58,11 @@ public class PlanComidaCommandServiceImpl(
         return true;
     }
 
-    public async Task<bool> Handle(DeletePlanComidaCommand command)
+    public async Task<bool> Handle(DeletePlanComidaCommand command, int userId)
     {
         ArgumentNullException.ThrowIfNull(command);
         var entity = await _repository.FindByIdAsync(command.Id);
-        if (entity == null) return false;
+        if (entity == null || entity.IdUsuario != userId) return false;
 
         _repository.Remove(entity);
         await _unitOfWork.CompleteAsync();

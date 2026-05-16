@@ -10,4 +10,5 @@ public interface IUserCommandService
     Task<User> Handle(UpdateUserProfileCommand command, int userId);
     Task<User> Handle(ChangeUserSubscriptionCommand command, int userId);
     Task Handle(ChangeUserPasswordCommand command, int userId);
+    Task Handle(DeleteUserAccountCommand command);
 }

@@ -3,6 +3,7 @@ using food_heaven_backend.Security.Domain.Model.Exceptions;
 using food_heaven_backend.Security.Domain.Model.Queries;
 using food_heaven_backend.Security.Domain.Services;
 using food_heaven_backend.Security.Interfaces.Rest.Resources;
+using food_heaven_backend.Shared.Interfaces.Rest;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -75,6 +76,8 @@ public class UserController : ControllerBase
     {
         try
         {
+            if (userId != User.GetAuthenticatedUserId()) return Forbid();
+
             var user = await _userQueryService.Handle(new GetUserByIdQuery(userId));
             return Ok(UserResource.FromEntity(user));
         }
@@ -98,6 +101,8 @@ public class UserController : ControllerBase
     {
         try
         {
+            if (userId != User.GetAuthenticatedUserId()) return Forbid();
+
             var user = await _userCommandService.Handle(command, userId);
             return Ok(UserResource.FromEntity(user));
         }
@@ -124,6 +129,8 @@ public class UserController : ControllerBase
     {
         try
         {
+            if (userId != User.GetAuthenticatedUserId()) return Forbid();
+
             var user = await _userCommandService.Handle(command, userId);
             return Ok(UserResource.FromEntity(user));
         }
@@ -147,6 +154,8 @@ public class UserController : ControllerBase
     {
         try
         {
+            if (userId != User.GetAuthenticatedUserId()) return Forbid();
+
             await _userCommandService.Handle(command, userId);
             return NoContent();
         }
@@ -161,6 +170,25 @@ public class UserController : ControllerBase
         catch (ArgumentException ex)
         {
             return UnprocessableEntity(new { message = ex.Message });
+        }
+    }
+
+    [HttpDelete("{userId:int}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteAccount(int userId)
+    {
+        try
+        {
+            if (userId != User.GetAuthenticatedUserId()) return Forbid();
+
+            await _userCommandService.Handle(new DeleteUserAccountCommand(userId));
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
         }
     }
 }
