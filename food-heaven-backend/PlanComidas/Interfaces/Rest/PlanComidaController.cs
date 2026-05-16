@@ -5,11 +5,14 @@ using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;
 using food_heaven_backend.PlanComidas.Interfaces.Rest.Resources;
+using food_heaven_backend.Shared.Interfaces.Rest;
+using Microsoft.AspNetCore.Authorization;
 
 namespace food_heaven_backend.PlanComidas.Interfaces.Rest;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize]
 [Produces("application/json")]
 public class PlanComidaController(
     IPlanComidaQueryService queryService,
@@ -20,7 +23,8 @@ public class PlanComidaController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAll()
     {
-        var result = await queryService.Handle(new GetAllPlanComidasQuery());
+        var currentUserId = User.GetAuthenticatedUserId();
+        var result = await queryService.Handle(new GetPlanComidaByUserIdQuery(currentUserId));
         return result.Any()
             ? Ok(result.Select(PlanComidaResource.FromEntity))
             : NotFound("No meal plans were found.");
@@ -31,6 +35,9 @@ public class PlanComidaController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
+        var currentUserId = User.GetAuthenticatedUserId();
+        if (id != currentUserId) return Forbid();
+
         var result = await queryService.Handle(new GetPlanComidaByUserIdQuery(id));
         return result.Any()
             ? Ok(result.Select(PlanComidaResource.FromEntity))
@@ -46,6 +53,8 @@ public class PlanComidaController(
     {
         try
         {
+            if (command.IdUsuario != User.GetAuthenticatedUserId()) return Forbid();
+
             var plan = await commandService.Handle(command);
             return CreatedAtAction(nameof(GetById), new { id = plan.IdUsuario }, PlanComidaResource.FromEntity(plan));
         }
@@ -65,6 +74,8 @@ public class PlanComidaController(
     {
         try
         {
+            if (command.IdUsuario != User.GetAuthenticatedUserId()) return Forbid();
+
             var updated = await commandService.Handle(command, id);
             return updated ? Ok() : NotFound();
         }
@@ -79,7 +90,7 @@ public class PlanComidaController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
-        var deleted = await commandService.Handle(new DeletePlanComidaCommand(id));
+        var deleted = await commandService.Handle(new DeletePlanComidaCommand(id), User.GetAuthenticatedUserId());
         return deleted ? NoContent() : NotFound();
     }
 }

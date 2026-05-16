@@ -7,5 +7,5 @@ public interface IPlanComidaCommandService
 {
     Task<PlanComida> Handle(CreatePlanComidaCommand command);
     Task<bool> Handle(UpdatePlanComidaCommand command, int id);
-    Task<bool> Handle(DeletePlanComidaCommand command);
+    Task<bool> Handle(DeletePlanComidaCommand command, int userId);
 }
