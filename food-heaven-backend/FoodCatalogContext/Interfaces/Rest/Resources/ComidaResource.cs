@@ -9,7 +9,6 @@ public record ComidaResource(
     string url,
     NutrienteResource nutriente,
     IReadOnlyDictionary<string, ComidaTranslationResource> translations,
-    int id_proveedor,
     int id_tipo_comida,
     int es_especial
 )
@@ -36,7 +35,6 @@ public record ComidaResource(
                     string.IsNullOrWhiteSpace(comida.ComplementoEn) ? comida.Complemento : comida.ComplementoEn
                 )
             },
-            id_proveedor: comida.Id_Proveedor,
             id_tipo_comida: comida.id_tipo_comida,
             es_especial: comida.es_especial
         );

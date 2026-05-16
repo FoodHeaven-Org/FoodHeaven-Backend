@@ -37,10 +37,7 @@ public class Comida : BaseEntity
     public int Grasa { get; set; }
 
     [Column("id_proveedor")]
-    public int Id_Proveedor { get; set; }
-
-    [ForeignKey(nameof(Id_Proveedor))]
-    public Proveedor Proveedor { get; set; } = null!;
+    public int CatalogSourceId { get; set; } = 1;
 
     [Column("id_tipo_comida")]
     public int id_tipo_comida { get; set; }
@@ -59,7 +56,6 @@ public class Comida : BaseEntity
         int prote,
         int carbo,
         int grasa,
-        int idProveedor,
         int idTipoComida,
         int es_especial,
         string nombreEn = "",
@@ -74,7 +70,6 @@ public class Comida : BaseEntity
         Prote = prote;
         Carbo = carbo;
         Grasa = grasa;
-        Id_Proveedor = idProveedor;
         id_tipo_comida = idTipoComida;
         this.es_especial = es_especial;
     }

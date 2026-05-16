@@ -10,8 +10,6 @@ public static class FoodHeavenDataSeeder
     public static async Task SeedAsync(FoodHeavenContext context)
     {
         await SeedMealTypesAsync(context);
-        await SeedProviderTypesAsync(context);
-        await SeedProvidersAsync(context);
         await SeedMealsAsync(context);
     }
 
@@ -24,35 +22,6 @@ public static class FoodHeavenDataSeeder
             new TipoComida { Id = 2, Descripcion = TipoComidas.Almuerzo },
             new TipoComida { Id = 3, Descripcion = TipoComidas.Cena }
         );
-
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task SeedProviderTypesAsync(FoodHeavenContext context)
-    {
-        if (await context.TiposProveedor.AnyAsync()) return;
-
-        context.TiposProveedor.Add(new TipoProveedor
-        {
-            Id = 1,
-            Descripcion = TipoProveedorDescripcion.ProveedorDirecto
-        });
-
-        await context.SaveChangesAsync();
-    }
-
-    private static async Task SeedProvidersAsync(FoodHeavenContext context)
-    {
-        if (await context.Proveedores.AnyAsync()) return;
-
-        context.Proveedores.Add(new Proveedor
-        {
-            Id = 1,
-            Nombre = "FoodHeaven Kitchen",
-            Distrito = "Lima",
-            Contacto = "local@foodheaven.test",
-            TipoProveedorId = 1
-        });
 
         await context.SaveChangesAsync();
     }
@@ -93,7 +62,7 @@ public static class FoodHeavenDataSeeder
             existingMeal.Prote = meal.Prote;
             existingMeal.Carbo = meal.Carbo;
             existingMeal.Grasa = meal.Grasa;
-            existingMeal.Id_Proveedor = meal.Id_Proveedor;
+            existingMeal.CatalogSourceId = meal.CatalogSourceId;
             existingMeal.id_tipo_comida = meal.id_tipo_comida;
             existingMeal.es_especial = meal.es_especial;
         }
@@ -126,7 +95,7 @@ public static class FoodHeavenDataSeeder
             Prote = protein,
             Carbo = carbs,
             Grasa = fat,
-            Id_Proveedor = 1,
+            CatalogSourceId = 1,
             id_tipo_comida = mealTypeId,
             es_especial = 0
         };

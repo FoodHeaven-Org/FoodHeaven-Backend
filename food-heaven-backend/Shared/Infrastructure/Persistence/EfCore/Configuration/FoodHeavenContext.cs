@@ -7,8 +7,6 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
 {
     public class FoodHeavenContext(DbContextOptions options) : DbContext(options)
     {
-        public DbSet<Proveedor> Proveedores { get; set; }
-        public DbSet<TipoProveedor> TiposProveedor { get; set; }
         public DbSet<TipoComida> TipoComidas { get; set; }
         public DbSet<Comida> Comidas { get; set; }
         public DbSet<PlanComida> PlanesComida { get; set; }
@@ -33,33 +31,6 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                 entity.Property(u => u.Address).HasColumnName("address").IsRequired().HasMaxLength(180);
                 entity.Property(u => u.PaymentMethod).HasColumnName("payment_method").IsRequired().HasMaxLength(80);
 
-            });
-            builder.Entity<TipoProveedor>(entity =>
-            {
-                entity.ToTable("TipoProveedor");
-
-                entity.HasKey(tp => tp.Id);
-
-                entity.Property(tp => tp.Id).HasColumnName("id_tipo_proveedor");
-                entity.Property(tp => tp.Descripcion).HasColumnName("Descripcion").IsRequired().HasMaxLength(100);
-            });
-
-            builder.Entity<Proveedor>(entity =>
-            {
-                entity.ToTable("Proveedor");
-
-                entity.HasKey(p => p.Id);
-
-                entity.Property(p => p.Id).HasColumnName("id_proveedor");
-                entity.Property(p => p.Nombre).HasColumnName("nombre").IsRequired().HasMaxLength(100);
-                entity.Property(p => p.Distrito).HasColumnName("distrito").IsRequired().HasMaxLength(100);
-                entity.Property(p => p.Contacto).HasColumnName("contacto").IsRequired().HasMaxLength(100);
-                entity.Property(p => p.TipoProveedorId).HasColumnName("id_tipo_proveedor").IsRequired();
-
-                entity.HasOne(p => p.TipoProveedor)
-                      .WithMany()
-                      .HasForeignKey(p => p.TipoProveedorId)
-                      .OnDelete(DeleteBehavior.Restrict);
             });
             builder.Entity<Comida>(entity =>
             {
@@ -116,7 +87,7 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                     .HasColumnName("id_tipo_comida")
                     .IsRequired();
 
-                entity.Property(c => c.Id_Proveedor)
+                entity.Property(c => c.CatalogSourceId)
                     .HasColumnName("id_proveedor")
                     .IsRequired();
 
@@ -125,10 +96,6 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                     .HasForeignKey(c => c.id_tipo_comida)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(c => c.Proveedor)
-                    .WithMany()
-                    .HasForeignKey(c => c.Id_Proveedor)
-                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<TipoComida>(entity =>
