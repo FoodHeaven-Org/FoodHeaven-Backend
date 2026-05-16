@@ -6,6 +6,7 @@ using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
 using food_heaven_backend.PlanComidas.Domain.Model.Queries;
 using food_heaven_backend.PlanComidas.Domain.Services;
+using food_heaven_backend.PlanComidas.Interfaces.Rest.Resources;
 using food_heaven_backend.PlanComidas.Interfaces.Rest.Transform;
 
 namespace food_heaven_backend.PlanComidas.Interfaces.Rest;
@@ -18,6 +19,8 @@ public class PlanComidaController(
     IPlanComidaCommandService commandService) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<PlanComidaResource>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAll()
     {
         var result = await queryService.Handle(new GetAllPlanComidasQuery());
@@ -27,6 +30,8 @@ public class PlanComidaController(
     }
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(IEnumerable<PlanComidaResource>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         var result = await queryService.Handle(new GetPlanComidaByUserIdQuery(id));
@@ -36,6 +41,9 @@ public class PlanComidaController(
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(PlanComidaResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Post([FromBody] CreatePlanComidaCommand command)
     {
         try
@@ -48,6 +56,9 @@ public class PlanComidaController(
     }
 
     [HttpPut("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Put(int id, [FromBody] UpdatePlanComidaCommand command)
     {
         try
@@ -59,6 +70,8 @@ public class PlanComidaController(
     }
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await commandService.Handle(new DeletePlanComidaCommand(id));

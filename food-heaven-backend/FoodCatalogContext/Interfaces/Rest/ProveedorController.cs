@@ -8,6 +8,7 @@ using food_heaven_backend.FoodCatalogContext.Domain.Model.Commands;
 using food_heaven_backend.FoodCatalogContext.Domain.Services;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Exceptions;
 using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
+using food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Resources;
 using food_heaven_backend.FoodCatalogContext.Interfaces.Rest.Transform;
 
 namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
@@ -21,6 +22,8 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         private readonly IProveedorCommandService _commandService = commandService;
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<ProveedorResource>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAsync()
         {
             var result = await _queryService.Handle(new GetAllProvidersQuery());
@@ -30,6 +33,9 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(ProveedorResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
             if (id <= 0) return BadRequest("Invalid provider ID.");
@@ -43,7 +49,8 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status417ExpectationFailed)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post([FromBody] CreateProveedorCommand command)
         {
             if (command == null) return BadRequest("Provider data cannot be null.");
@@ -68,6 +75,10 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         }
 
         [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateProveedorCommand command)
         {
             if (id <= 0) return BadRequest("Invalid provider ID.");
@@ -77,6 +88,10 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
                 await _commandService.Handle(command, id);
                 return Ok();
             }
+            catch (ProveedorNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
                 return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
@@ -84,14 +99,18 @@ namespace food_heaven_backend.FoodCatalogContext.Interfaces.Rest
         }
 
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return BadRequest("Invalid provider ID.");
 
             try
             {
-                await _commandService.Handle(new DeleteProveedorCommand(id));
-                return NoContent();
+                var deleted = await _commandService.Handle(new DeleteProveedorCommand(id));
+                return deleted ? NoContent() : NotFound();
             }
             catch (Exception ex)
             {

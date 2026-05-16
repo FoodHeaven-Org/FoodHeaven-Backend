@@ -1,86 +1,90 @@
-using food_heaven_backend.Security.Domain.Model.Commands;
+﻿using food_heaven_backend.Security.Domain.Model.Commands;
+using food_heaven_backend.Security.Domain.Model.Entities;
 using food_heaven_backend.Security.Domain.Model.Exceptions;
-using food_heaven_backend.Security.Domain.Services;
 using food_heaven_backend.Security.Domain.Model.Queries;
+using food_heaven_backend.Security.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace food_heaven_backend.Security.Interfaces.Rest
+namespace food_heaven_backend.Security.Interfaces.Rest;
+
+[ApiController]
+[Route("api/v1/[controller]")]
+[Produces("application/json")]
+public class UserController : ControllerBase
 {
-    [ApiController]
-    public class UserController : ControllerBase
+    private readonly IUserCommandService _userCommandService;
+    private readonly IUserQueryService _userQueryService;
+
+    public UserController(IUserCommandService userCommandService, IUserQueryService userQueryService)
     {
-        private readonly IUserCommandService _userCommandService;
-        private readonly IUserQueryService _userQueryService;
+        _userCommandService = userCommandService ?? throw new ArgumentNullException(nameof(userCommandService));
+        _userQueryService = userQueryService ?? throw new ArgumentNullException(nameof(userQueryService));
+    }
 
-        // Constructor para inyectar el servicio de comandos y el servicio de consultas
-        public UserController(IUserCommandService userCommandService, IUserQueryService userQueryService)
+    [HttpPost("sign-up")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(User), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> SignUp([FromBody] SignUpCommand command)
+    {
+        try
         {
-            _userCommandService = userCommandService ?? throw new ArgumentNullException(nameof(userCommandService));
-            _userQueryService = userQueryService ?? throw new ArgumentNullException(nameof(userQueryService));
+            var user = await _userCommandService.Handle(command);
+            return Created(string.Empty, user);
         }
-
-        [HttpPost("sign-up")]
-        [AllowAnonymous]
-        public async Task<IActionResult> SignUp([FromBody] SignUpCommand command)
+        catch (UsernameAlreadyTakenException ex)
         {
-            try
-            {
-                var user = await _userCommandService.Handle(command);
-                return Created(string.Empty, user); // Devuelve el usuario creado
-            }
-            catch (UsernameAlreadyTakenException ex)
-            {
-                return Conflict(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", detail = ex.Message });
-            }
+            return Conflict(new { message = ex.Message });
         }
-
-        [HttpPost("login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        catch (Exception ex)
         {
-            try
-            {
-                var jwToken = await _userCommandService.Handle(command);
-                return Ok(jwToken);
-            }
-            catch (InvalidCredentialsException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", detail = ex.Message });
-            }
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", detail = ex.Message });
         }
+    }
 
-        // Nuevo endpoint GET para obtener un usuario por ID
-        [HttpGet("api/v1/User/{userId}")]
-        [Authorize]  // Asegúrate de tener autorización adecuada aquí
-        public async Task<IActionResult> GetUserById(int userId)
+    [HttpPost("login")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Login([FromBody] LoginCommand command)
+    {
+        try
         {
-            try
-            {
-                // Consulta el usuario por ID
-                var query = new GetUserByIdQuery(userId);
-                var user = await _userQueryService.Handle(query);
+            var jwtToken = await _userCommandService.Handle(command);
+            return Ok(jwtToken);
+        }
+        catch (InvalidCredentialsException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", detail = ex.Message });
+        }
+    }
 
-                // Si el usuario no existe, se responde con un 404
-                if (user == null)
-                {
-                    return NotFound(new { message = $"User with ID {userId} not found." });
-                }
-
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", detail = ex.Message });
-            }
+    [HttpGet("{userId:int}")]
+    [Authorize]
+    [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetUserById(int userId)
+    {
+        try
+        {
+            var user = await _userQueryService.Handle(new GetUserByIdQuery(userId));
+            return Ok(user);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred", detail = ex.Message });
         }
     }
 }
