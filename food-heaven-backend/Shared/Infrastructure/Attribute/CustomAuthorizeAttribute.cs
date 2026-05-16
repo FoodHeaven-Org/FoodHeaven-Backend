@@ -1,4 +1,4 @@
-using food_heaven_backend.Security.Domain.Entities;
+using food_heaven_backend.Security.Domain.Model.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

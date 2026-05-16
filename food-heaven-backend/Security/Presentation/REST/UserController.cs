@@ -1,7 +1,7 @@
-using food_heaven_backend.Security.Domain.Comands;
-using food_heaven_backend.Security.Domain.Exceptions;
-using food_heaven_backend.Security.Domain.Service;
-using food_heaven_backend.Security.Domain.Queries;
+using food_heaven_backend.Security.Domain.Model.Commands;
+using food_heaven_backend.Security.Domain.Model.Exceptions;
+using food_heaven_backend.Security.Domain.Services;
+using food_heaven_backend.Security.Domain.Model.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

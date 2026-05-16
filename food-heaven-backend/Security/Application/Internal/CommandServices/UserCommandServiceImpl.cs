@@ -1,8 +1,8 @@
-using food_heaven_backend.Security.Domain.Comands;
-using food_heaven_backend.Security.Domain.Entities;
-using food_heaven_backend.Security.Domain.Exceptions;
+using food_heaven_backend.Security.Domain.Model.Commands;
+using food_heaven_backend.Security.Domain.Model.Entities;
+using food_heaven_backend.Security.Domain.Model.Exceptions;
 using food_heaven_backend.Security.Domain.Repositories;
-using food_heaven_backend.Security.Domain.Service;
+using food_heaven_backend.Security.Domain.Services;
 using food_heaven_backend.Shared.Domain.Repositories;
 
 namespace food_heaven_backend.Security.Application.Internal.CommandServices;

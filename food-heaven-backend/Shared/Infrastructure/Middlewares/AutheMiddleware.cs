@@ -1,4 +1,4 @@
-using food_heaven_backend.Security.Domain.Service;
+using food_heaven_backend.Security.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 

@@ -1,4 +1,4 @@
-namespace food_heaven_backend.Security.Domain.Queries;
+namespace food_heaven_backend.Security.Domain.Model.Queries;
 
 public record GetUserByIdQuery
 {

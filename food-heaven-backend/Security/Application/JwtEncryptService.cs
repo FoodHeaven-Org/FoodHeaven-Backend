@@ -1,8 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using food_heaven_backend.Security.Domain.Entities;
-using food_heaven_backend.Security.Domain.Service;
+using food_heaven_backend.Security.Domain.Model.Entities;
+using food_heaven_backend.Security.Domain.Services;
 using Microsoft.IdentityModel.Tokens;
 
 namespace food_heaven_backend.Security.Application
