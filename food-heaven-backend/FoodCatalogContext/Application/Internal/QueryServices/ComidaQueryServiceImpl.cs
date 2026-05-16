@@ -1,0 +1,36 @@
+using food_heaven_backend.FoodCatalogContext.Domain.Repositories;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Entities;
+using food_heaven_backend.FoodCatalogContext.Domain.Model.Queries;
+using food_heaven_backend.FoodCatalogContext.Domain.Services;
+
+namespace food_heaven_backend.FoodCatalogContext.Application.Internal.QueryServices
+{
+    public class ComidaQueryServiceImpl(IComidaRepository comidaRepository) : IComidaQueryService
+    {
+        private readonly IComidaRepository _comidaRepository = comidaRepository ?? throw new ArgumentNullException(nameof(comidaRepository));
+
+        public async Task<IEnumerable<Comida>> Handle(GetAllComidaQuery query)
+        {
+            var comidas = await _comidaRepository.ListAsync();
+            return comidas ?? Enumerable.Empty<Comida>();
+        }
+
+
+        public async Task<Comida?> Handle(GetComidaByIdQuery query)
+        {
+            if (query == null) throw new ArgumentNullException(nameof(query));
+
+            var comida = await _comidaRepository.FindComidaByIdAsync(query.Id);
+            return comida;
+        }
+
+        public async Task<IEnumerable<Comida>> Handle(GetComidasByTipoComidaQuery query)
+        {
+            if (query == null) throw new ArgumentNullException(nameof(query));
+
+            var comida = await _comidaRepository.ListByTipoComidaAsync(query.id_tipo_comida);
+            return comida;
+        }
+
+    }
+}

@@ -1,0 +1,15 @@
+bin/
+obj/
+.idea/
+.vs/
+*.user
+*.suo
+*.rsuser
+*.csproj.lscache
+
+**/bin/
+**/obj/
+**/.idea/
+
+appsettings.*.local.json
+*.log

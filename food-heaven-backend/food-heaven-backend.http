@@ -1,0 +1,4 @@
+@food_heaven_backend_HostAddress = https://food-heaven-backend-fx65.onrender.com
+
+GET {{food_heaven_backend_HostAddress}}/weatherforecast/
+Accept: application/json
