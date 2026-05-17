@@ -85,6 +85,12 @@ public static class FoodHeavenDataSeeder
             }
         }
 
+        var retiredChickenStews = await context.Comidas
+            .Where(meal => meal.Nombre == "Estofado de pollo")
+            .ToListAsync();
+
+        context.Comidas.RemoveRange(retiredChickenStews);
+
         await context.SaveChangesAsync();
     }
 
