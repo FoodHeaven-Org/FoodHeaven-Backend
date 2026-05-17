@@ -13,6 +13,9 @@ public record UpdateUserProfileCommand
     public IReadOnlyCollection<DeliveryAddress> DeliveryAddresses { get; init; }
     public string PaymentMethod { get; init; }
     public PaymentCardValueObject? PaymentCard { get; init; }
+    public string? CardNumber { get; init; }
+    public string? CardCvv { get; init; }
+    public string? CardExpiration { get; init; }
 
     public UpdateUserProfileCommand(
         string fullName,
@@ -44,6 +47,9 @@ public record UpdateUserProfileCommand
         Phone = phone;
         City = city.Trim();
         Address = address.Trim();
+        CardNumber = cardNumber;
+        CardCvv = cardCvv;
+        CardExpiration = cardExpiration;
         DeliveryAddresses = DeliveryAddress.Normalize(deliveryAddresses, Address);
         PaymentMethod = PaymentCard?.DisplayName ?? paymentMethod?.Trim() ?? string.Empty;
     }
