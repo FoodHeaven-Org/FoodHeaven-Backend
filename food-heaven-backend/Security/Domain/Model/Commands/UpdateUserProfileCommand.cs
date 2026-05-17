@@ -1,5 +1,8 @@
 namespace food_heaven_backend.Security.Domain.Model.Commands;
 
+using food_heaven_backend.Security.Domain.Model.ValueObjects;
+using PaymentCardValueObject = food_heaven_backend.Security.Domain.Model.ValueObjects.PaymentCard;
+
 public record UpdateUserProfileCommand
 {
     public string FullName { get; init; }
@@ -7,7 +10,12 @@ public record UpdateUserProfileCommand
     public int Phone { get; init; }
     public string City { get; init; }
     public string Address { get; init; }
+    public IReadOnlyCollection<DeliveryAddress> DeliveryAddresses { get; init; }
     public string PaymentMethod { get; init; }
+    public PaymentCardValueObject? PaymentCard { get; init; }
+    public string? CardNumber { get; init; }
+    public string? CardCvv { get; init; }
+    public string? CardExpiration { get; init; }
 
     public UpdateUserProfileCommand(
         string fullName,
@@ -15,22 +23,34 @@ public record UpdateUserProfileCommand
         int phone,
         string city,
         string? address = null,
-        string? paymentMethod = null)
+        IReadOnlyCollection<DeliveryAddress>? deliveryAddresses = null,
+        string? paymentMethod = null,
+        string? cardNumber = null,
+        string? cardCvv = null,
+        string? cardExpiration = null)
     {
         if (string.IsNullOrWhiteSpace(fullName)) throw new ArgumentException("Full name is required.", nameof(fullName));
         if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("Username is required.", nameof(username));
         if (phone <= 0) throw new ArgumentException("Phone must be greater than zero.", nameof(phone));
         if (string.IsNullOrWhiteSpace(city)) throw new ArgumentException("City is required.", nameof(city));
         if (string.IsNullOrWhiteSpace(address)) throw new ArgumentException("Address is required.", nameof(address));
-        if (string.IsNullOrWhiteSpace(paymentMethod)) throw new ArgumentException("Payment method is required.", nameof(paymentMethod));
-        if (paymentMethod.Length > 80)
+        if (!string.IsNullOrWhiteSpace(paymentMethod) && paymentMethod.Length > 80)
             throw new ArgumentException("Payment method must be at most 80 characters.", nameof(paymentMethod));
+
+        var hasPaymentCardUpdate = PaymentCardValueObject.HasRawInput(cardNumber, cardCvv, cardExpiration);
+        PaymentCard = hasPaymentCardUpdate
+            ? PaymentCardValueObject.FromRaw(cardNumber, cardCvv, cardExpiration)
+            : null;
 
         FullName = fullName.Trim();
         Username = username.Trim();
         Phone = phone;
         City = city.Trim();
         Address = address.Trim();
-        PaymentMethod = paymentMethod.Trim();
+        CardNumber = cardNumber;
+        CardCvv = cardCvv;
+        CardExpiration = cardExpiration;
+        DeliveryAddresses = DeliveryAddress.Normalize(deliveryAddresses, Address);
+        PaymentMethod = PaymentCard?.DisplayName ?? paymentMethod?.Trim() ?? string.Empty;
     }
 }
