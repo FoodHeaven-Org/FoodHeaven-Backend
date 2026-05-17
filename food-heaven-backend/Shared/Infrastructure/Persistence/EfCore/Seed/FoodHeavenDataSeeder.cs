@@ -62,9 +62,7 @@ public static class FoodHeavenDataSeeder
             existingMeal.Prote = meal.Prote;
             existingMeal.Carbo = meal.Carbo;
             existingMeal.Grasa = meal.Grasa;
-            existingMeal.CatalogSourceId = meal.CatalogSourceId;
             existingMeal.id_tipo_comida = meal.id_tipo_comida;
-            existingMeal.CatalogFeatureFlag = meal.CatalogFeatureFlag;
         }
 
         await context.SaveChangesAsync();
@@ -95,9 +93,7 @@ public static class FoodHeavenDataSeeder
             Prote = protein,
             Carbo = carbs,
             Grasa = fat,
-            CatalogSourceId = 1,
             id_tipo_comida = mealTypeId,
-            CatalogFeatureFlag = 0
         };
     }
 }
