@@ -36,17 +36,11 @@ public class Comida : BaseEntity
     [Column("grasa")]
     public int Grasa { get; set; }
 
-    [Column("id_proveedor")]
-    public int CatalogSourceId { get; set; } = 1;
-
     [Column("id_tipo_comida")]
     public int id_tipo_comida { get; set; }
 
     [ForeignKey(nameof(id_tipo_comida))]
     public TipoComida TipoComida { get; set; } = null!;
-
-    [Column("es_especial")]
-    public int CatalogFeatureFlag { get; set; } = 0;
 
     public Comida(
         string nombre,

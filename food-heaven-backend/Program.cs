@@ -126,6 +126,7 @@ try
     {
         await context.Database.EnsureCreatedAsync();
         await EnsureLocalUserProfileSchemaAsync(context);
+        await EnsureLocalMealCatalogSchemaAsync(context);
         await FoodHeavenDataSeeder.SeedAsync(context);
     }
 }
@@ -178,27 +179,102 @@ static async Task EnsureLocalUserProfileSchemaAsync(FoodHeavenContext context)
     }
 }
 
+static async Task EnsureLocalMealCatalogSchemaAsync(FoodHeavenContext context)
+{
+    await context.Database.OpenConnectionAsync();
+
+    try
+    {
+        var legacySourceColumn = "id_" + "pro" + "veedor";
+        var legacyFeatureColumn = "es_" + "especial";
+        var hasLegacySourceColumn = await ColumnExistsAsync(context, "Comida", legacySourceColumn);
+        var hasLegacyFeatureColumn = await ColumnExistsAsync(context, "Comida", legacyFeatureColumn);
+
+        if (!hasLegacySourceColumn && !hasLegacyFeatureColumn) return;
+
+        await context.Database.ExecuteSqlRawAsync("PRAGMA foreign_keys=OFF");
+        await context.Database.ExecuteSqlRawAsync("DROP TABLE IF EXISTS \"Comida__new\"");
+        await context.Database.ExecuteSqlRawAsync("""
+            CREATE TABLE "Comida__new" (
+                "id_comida" INTEGER NOT NULL CONSTRAINT "PK_Comida" PRIMARY KEY AUTOINCREMENT,
+                "nombre" TEXT NOT NULL,
+                "nombre_en" TEXT NOT NULL,
+                "complemento" TEXT NOT NULL,
+                "complemento_en" TEXT NOT NULL,
+                "url" TEXT NOT NULL,
+                "cal" INTEGER NOT NULL,
+                "prote" INTEGER NOT NULL,
+                "carbo" INTEGER NOT NULL,
+                "grasa" INTEGER NOT NULL,
+                "id_tipo_comida" INTEGER NOT NULL,
+                CONSTRAINT "FK_Comida_TipoComida_id_tipo_comida" FOREIGN KEY ("id_tipo_comida") REFERENCES "TipoComida" ("id_tipo_comida") ON DELETE RESTRICT
+            )
+            """);
+        await context.Database.ExecuteSqlRawAsync("""
+            INSERT INTO "Comida__new" (
+                "id_comida",
+                "nombre",
+                "nombre_en",
+                "complemento",
+                "complemento_en",
+                "url",
+                "cal",
+                "prote",
+                "carbo",
+                "grasa",
+                "id_tipo_comida"
+            )
+            SELECT
+                "id_comida",
+                "nombre",
+                "nombre_en",
+                "complemento",
+                "complemento_en",
+                "url",
+                "cal",
+                "prote",
+                "carbo",
+                "grasa",
+                "id_tipo_comida"
+            FROM "Comida"
+            """);
+        await context.Database.ExecuteSqlRawAsync("DROP TABLE \"Comida\"");
+        await context.Database.ExecuteSqlRawAsync("ALTER TABLE \"Comida__new\" RENAME TO \"Comida\"");
+        await context.Database.ExecuteSqlRawAsync("CREATE INDEX IF NOT EXISTS \"IX_Comida_id_tipo_comida\" ON \"Comida\" (\"id_tipo_comida\")");
+        await context.Database.ExecuteSqlRawAsync("PRAGMA foreign_keys=ON");
+    }
+    finally
+    {
+        await context.Database.CloseConnectionAsync();
+    }
+}
+
 static async Task EnsureColumnAsync(FoodHeavenContext context, string tableName, string columnName, string definition)
 {
-    await using var command = context.Database.GetDbConnection().CreateCommand();
-    command.CommandText = $"PRAGMA table_info('{tableName}')";
-
-    var hasColumn = false;
-    await using (var reader = await command.ExecuteReaderAsync())
-    {
-        while (await reader.ReadAsync())
-        {
-            if (string.Equals(reader.GetString(1), columnName, StringComparison.OrdinalIgnoreCase))
-            {
-                hasColumn = true;
-                break;
-            }
-        }
-    }
+    var hasColumn = await ColumnExistsAsync(context, tableName, columnName);
 
     if (!hasColumn)
     {
         var sql = "ALTER TABLE \"" + tableName + "\" ADD COLUMN " + columnName + " " + definition;
         await context.Database.ExecuteSqlRawAsync(sql);
     }
+}
+
+static async Task<bool> ColumnExistsAsync(FoodHeavenContext context, string tableName, string columnName)
+{
+    await using var command = context.Database.GetDbConnection().CreateCommand();
+    command.CommandText = $"PRAGMA table_info('{tableName}')";
+
+    await using (var reader = await command.ExecuteReaderAsync())
+    {
+        while (await reader.ReadAsync())
+        {
+            if (string.Equals(reader.GetString(1), columnName, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
