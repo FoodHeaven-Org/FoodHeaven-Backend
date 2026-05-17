@@ -28,7 +28,11 @@ namespace food_heaven_backend.Security.Infrastructure.Tokens
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Subscription),
                 new Claim("phone", user.Phone.ToString()),
-                new Claim("city", user.City)
+                new Claim("city", user.City),
+                new Claim("address", user.Address),
+                new Claim("paymentCardBrand", user.PaymentCardBrand),
+                new Claim("paymentCardLastFour", user.PaymentCardLastFour),
+                new Claim("paymentCardExpiration", user.PaymentCardExpiration)
             };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);

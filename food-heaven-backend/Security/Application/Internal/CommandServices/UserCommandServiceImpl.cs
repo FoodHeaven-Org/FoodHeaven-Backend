@@ -45,7 +45,10 @@ public class UserCommandServiceImpl : IUserCommandService
             Phone = command.Phone,
             City = command.City,
             Address = command.Address,
-            PaymentMethod = command.PaymentMethod
+            PaymentMethod = command.PaymentMethod,
+            PaymentCardBrand = command.PaymentCard.Brand,
+            PaymentCardLastFour = command.PaymentCard.LastFour,
+            PaymentCardExpiration = command.PaymentCard.Expiration
         };
 
         await _userRepository.AddAsync(user);
@@ -75,7 +78,14 @@ public class UserCommandServiceImpl : IUserCommandService
         user.Phone = command.Phone;
         user.City = command.City;
         user.Address = command.Address;
-        user.PaymentMethod = command.PaymentMethod;
+
+        if (command.PaymentCard != null)
+        {
+            user.PaymentMethod = command.PaymentMethod;
+            user.PaymentCardBrand = command.PaymentCard.Brand;
+            user.PaymentCardLastFour = command.PaymentCard.LastFour;
+            user.PaymentCardExpiration = command.PaymentCard.Expiration;
+        }
 
         _userRepository.Update(user);
         await _unitOfWork.CompleteAsync();

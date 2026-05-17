@@ -14,12 +14,14 @@ public record UserResource(
     int Phone,
     string City,
     string Address,
-    string PaymentMethod
+    string PaymentMethod,
+    PaymentCardResource PaymentCard
 )
 {
     public static UserResource FromEntity(User user)
     {
         var plan = UserSubscriptionPlan.FromCode(user.Subscription);
+        var paymentCard = PaymentCardResource.FromEntity(user);
 
         return new UserResource(
             user.Id,
@@ -32,7 +34,28 @@ public record UserResource(
             user.Phone,
             user.City,
             user.Address,
-            user.PaymentMethod
+            paymentCard.DisplayName,
+            paymentCard
         );
+    }
+}
+
+public record PaymentCardResource(
+    string Brand,
+    string LastFour,
+    string Expiration,
+    string DisplayName
+)
+{
+    public static PaymentCardResource FromEntity(User user)
+    {
+        var brand = user.PaymentCardBrand;
+        var lastFour = user.PaymentCardLastFour;
+        var expiration = user.PaymentCardExpiration;
+        var displayName = string.IsNullOrWhiteSpace(lastFour)
+            ? user.PaymentMethod
+            : $"{brand} ending in {lastFour}";
+
+        return new PaymentCardResource(brand, lastFour, expiration, displayName);
     }
 }
