@@ -21,14 +21,16 @@ public record UpdateUserProfileCommand
         if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("Username is required.", nameof(username));
         if (phone <= 0) throw new ArgumentException("Phone must be greater than zero.", nameof(phone));
         if (string.IsNullOrWhiteSpace(city)) throw new ArgumentException("City is required.", nameof(city));
-        if (!string.IsNullOrWhiteSpace(paymentMethod) && paymentMethod.Length > 80)
+        if (string.IsNullOrWhiteSpace(address)) throw new ArgumentException("Address is required.", nameof(address));
+        if (string.IsNullOrWhiteSpace(paymentMethod)) throw new ArgumentException("Payment method is required.", nameof(paymentMethod));
+        if (paymentMethod.Length > 80)
             throw new ArgumentException("Payment method must be at most 80 characters.", nameof(paymentMethod));
 
         FullName = fullName.Trim();
         Username = username.Trim();
         Phone = phone;
         City = city.Trim();
-        Address = address?.Trim() ?? string.Empty;
-        PaymentMethod = paymentMethod?.Trim() ?? string.Empty;
+        Address = address.Trim();
+        PaymentMethod = paymentMethod.Trim();
     }
 }
