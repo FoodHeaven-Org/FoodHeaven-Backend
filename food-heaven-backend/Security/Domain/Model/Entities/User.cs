@@ -17,6 +17,8 @@ public class User : BaseEntity
 
     public string Address { get; set; } = string.Empty;
 
+    public string DeliveryAddressesJson { get; set; } = "[]";
+
     public string PaymentMethod { get; set; } = string.Empty;
 
     public string PaymentCardBrand { get; set; } = string.Empty;

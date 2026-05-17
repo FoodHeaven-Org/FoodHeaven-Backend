@@ -12,6 +12,7 @@ public record SignUpCommand
     public int Phone { get; init; }
     public string City { get; init; }
     public string Address { get; init; }
+    public IReadOnlyCollection<DeliveryAddress> DeliveryAddresses { get; init; }
     public string PaymentMethod { get; init; }
     public PaymentCardValueObject PaymentCard { get; init; }
 
@@ -23,6 +24,7 @@ public record SignUpCommand
         string city,
         string? fullName = null,
         string? address = null,
+        IReadOnlyCollection<DeliveryAddress>? deliveryAddresses = null,
         string? paymentMethod = null,
         string? cardNumber = null,
         string? cardCvv = null,
@@ -44,6 +46,7 @@ public record SignUpCommand
         Phone = phone;
         City = city.Trim();
         Address = address.Trim();
+        DeliveryAddresses = DeliveryAddress.Normalize(deliveryAddresses, Address);
         PaymentCard = PaymentCardValueObject.FromRaw(cardNumber, cardCvv, cardExpiration);
         PaymentMethod = string.IsNullOrWhiteSpace(paymentMethod)
             ? PaymentCard.DisplayName

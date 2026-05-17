@@ -169,6 +169,7 @@ static async Task EnsureLocalUserProfileSchemaAsync(FoodHeavenContext context)
     {
         await EnsureColumnAsync(context, "user", "full_name", "TEXT NOT NULL DEFAULT ''");
         await EnsureColumnAsync(context, "user", "address", "TEXT NOT NULL DEFAULT ''");
+        await EnsureColumnAsync(context, "user", "delivery_addresses", "TEXT NOT NULL DEFAULT '[]'");
         await EnsureColumnAsync(context, "user", "payment_method", "TEXT NOT NULL DEFAULT ''");
         await EnsureColumnAsync(context, "user", "payment_card_brand", "TEXT NOT NULL DEFAULT ''");
         await EnsureColumnAsync(context, "user", "payment_card_last_four", "TEXT NOT NULL DEFAULT ''");
