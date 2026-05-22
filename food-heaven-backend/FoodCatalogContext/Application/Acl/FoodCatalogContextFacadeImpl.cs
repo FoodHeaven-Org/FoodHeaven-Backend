@@ -12,4 +12,10 @@ public class FoodCatalogContextFacadeImpl(IComidaRepository comidaRepository) : 
         ArgumentNullException.ThrowIfNull(mealIds);
         return _comidaRepository.AllMealIdsExistAsync(mealIds);
     }
+
+    public Task<IReadOnlyDictionary<int, int>> GetMealTypeIdsByMealIdsAsync(IEnumerable<int> mealIds)
+    {
+        ArgumentNullException.ThrowIfNull(mealIds);
+        return _comidaRepository.GetMealTypeIdsByMealIdsAsync(mealIds);
+    }
 }
