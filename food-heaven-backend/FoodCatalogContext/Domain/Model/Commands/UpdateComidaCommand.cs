@@ -27,8 +27,7 @@ public record UpdateComidaCommand
     {
         if (string.IsNullOrWhiteSpace(nombre)) throw new ArgumentException("Nombre is required.", nameof(nombre));
         if (string.IsNullOrWhiteSpace(complemento)) throw new ArgumentException("Complemento is required.", nameof(complemento));
-        if (string.IsNullOrWhiteSpace(url)) throw new ArgumentException("Url is required.", nameof(url));
-        if (id_tipo_comida <= 0) throw new ArgumentException("id_tipo_comida must be greater than zero.", nameof(id_tipo_comida));
+        EnsureMealDetailsAreValid(url, calorias, proteina, carbohidrato, grasa, id_tipo_comida);
 
         Nombre = nombre;
         NombreEn = nombreEn?.Trim() ?? string.Empty;
@@ -40,5 +39,29 @@ public record UpdateComidaCommand
         Carbohidrato = carbohidrato;
         Grasa = grasa;
         this.id_tipo_comida = id_tipo_comida;
+    }
+
+    private static void EnsureMealDetailsAreValid(
+        string url,
+        int calorias,
+        int proteina,
+        int carbohidrato,
+        int grasa,
+        int idTipoComida)
+    {
+        if (string.IsNullOrWhiteSpace(url)) throw new ArgumentException("Url is required.", nameof(url));
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri)
+            || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+        {
+            throw new ArgumentException("Url must be an absolute HTTP or HTTPS URL.", nameof(url));
+        }
+
+        if (idTipoComida is < 1 or > 3)
+            throw new ArgumentException("id_tipo_comida must be 1 (breakfast), 2 (lunch), or 3 (dinner).", nameof(idTipoComida));
+
+        if (calorias <= 0) throw new ArgumentException("Calorias must be greater than zero.", nameof(calorias));
+        if (proteina < 0) throw new ArgumentException("Proteina cannot be negative.", nameof(proteina));
+        if (carbohidrato < 0) throw new ArgumentException("Carbohidrato cannot be negative.", nameof(carbohidrato));
+        if (grasa < 0) throw new ArgumentException("Grasa cannot be negative.", nameof(grasa));
     }
 }
