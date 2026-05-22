@@ -153,7 +153,10 @@ public class UserCommandServiceImpl : IUserCommandService
 
         foreach (var mealPlan in mealPlans)
         {
-            var trimmedMealSlots = TrimMealSlotsForSubscription(mealPlan.ListaComidas, mealsPerDayLimit);
+            var trimmedMealSlots = TrimMealSlotsForSubscription(
+                mealPlan.ListaComidas,
+                mealsPerDayLimit,
+                mealPlan.FechaInicio);
 
             if (mealPlan.ListaComidas.SequenceEqual(trimmedMealSlots)) continue;
 
@@ -167,7 +170,7 @@ public class UserCommandServiceImpl : IUserCommandService
         }
     }
 
-    private static int[] TrimMealSlotsForSubscription(int[] mealSlots, int mealsPerDayLimit)
+    private static int[] TrimMealSlotsForSubscription(int[] mealSlots, int mealsPerDayLimit, DateTime startDate)
     {
         if (mealSlots.Length != WeeklyMealSlots) return mealSlots;
 
@@ -175,6 +178,8 @@ public class UserCommandServiceImpl : IUserCommandService
 
         for (var dayIndex = 0; dayIndex < DaysInWeek; dayIndex++)
         {
+            if (IsProtectedMealDay(startDate, dayIndex)) continue;
+
             var selectedMealsForDay = 0;
 
             for (var mealTypeIndex = 0; mealTypeIndex < MealTypesPerDay; mealTypeIndex++)
@@ -191,6 +196,11 @@ public class UserCommandServiceImpl : IUserCommandService
         }
 
         return trimmedMealSlots;
+    }
+
+    private static bool IsProtectedMealDay(DateTime startDate, int dayIndex)
+    {
+        return startDate.Date.AddDays(dayIndex) <= DateTime.Today;
     }
 
     private static string SerializeDeliveryAddresses(IReadOnlyCollection<DeliveryAddress> deliveryAddresses)
