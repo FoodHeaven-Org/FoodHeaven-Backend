@@ -78,6 +78,7 @@ public class PlanComidaCommandServiceImpl(
         int? currentPlanId = null)
     {
         await _externalFoodCatalogService.EnsureMealsExistAsync(mealIds);
+        await _externalFoodCatalogService.EnsureMealSlotsMatchMealTypesAsync(mealIds);
         await _externalUserSubscriptionService.EnsurePlanFitsSubscriptionAsync(userId, mealIds);
 
         if (await _repository.ExistsOverlappingPlanForUserAsync(userId, startDate, endDate, currentPlanId))

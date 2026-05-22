@@ -12,6 +12,10 @@ namespace food_heaven_backend.Security.Application.Internal.CommandServices;
 
 public class UserCommandServiceImpl : IUserCommandService
 {
+    private const int DaysInWeek = 7;
+    private const int MealTypesPerDay = 3;
+    private const int WeeklyMealSlots = DaysInWeek * MealTypesPerDay;
+
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IHashService _hashService;
@@ -100,8 +104,11 @@ public class UserCommandServiceImpl : IUserCommandService
     public async Task<User> Handle(ChangeUserSubscriptionCommand command, int userId)
     {
         var user = await GetExistingUserAsync(userId);
+        var subscriptionPlan = UserSubscriptionPlan.FromCode(command.Subscription);
 
-        user.Subscription = command.Subscription;
+        user.Subscription = subscriptionPlan.Code;
+
+        await TrimExistingMealPlansToSubscriptionAsync(userId, subscriptionPlan.MealsPerDay);
 
         _userRepository.Update(user);
         await _unitOfWork.CompleteAsync();
@@ -138,6 +145,52 @@ public class UserCommandServiceImpl : IUserCommandService
             throw new KeyNotFoundException($"User with ID {userId} not found.");
 
         return user;
+    }
+
+    private async Task TrimExistingMealPlansToSubscriptionAsync(int userId, int mealsPerDayLimit)
+    {
+        var mealPlans = await _planComidaRepository.FindPlanComidasByUserIdAsync(userId);
+
+        foreach (var mealPlan in mealPlans)
+        {
+            var trimmedMealSlots = TrimMealSlotsForSubscription(mealPlan.ListaComidas, mealsPerDayLimit);
+
+            if (mealPlan.ListaComidas.SequenceEqual(trimmedMealSlots)) continue;
+
+            mealPlan.UpdateDetails(
+                mealPlan.IdUsuario,
+                mealPlan.FechaInicio,
+                mealPlan.FechaFin,
+                trimmedMealSlots);
+
+            _planComidaRepository.Update(mealPlan);
+        }
+    }
+
+    private static int[] TrimMealSlotsForSubscription(int[] mealSlots, int mealsPerDayLimit)
+    {
+        if (mealSlots.Length != WeeklyMealSlots) return mealSlots;
+
+        var trimmedMealSlots = mealSlots.ToArray();
+
+        for (var dayIndex = 0; dayIndex < DaysInWeek; dayIndex++)
+        {
+            var selectedMealsForDay = 0;
+
+            for (var mealTypeIndex = 0; mealTypeIndex < MealTypesPerDay; mealTypeIndex++)
+            {
+                var slotIndex = mealTypeIndex * DaysInWeek + dayIndex;
+                if (trimmedMealSlots[slotIndex] <= 0) continue;
+
+                selectedMealsForDay++;
+                if (selectedMealsForDay > mealsPerDayLimit)
+                {
+                    trimmedMealSlots[slotIndex] = 0;
+                }
+            }
+        }
+
+        return trimmedMealSlots;
     }
 
     private static string SerializeDeliveryAddresses(IReadOnlyCollection<DeliveryAddress> deliveryAddresses)

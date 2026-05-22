@@ -116,6 +116,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (ArgumentException ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { message = ex.Message });
+    }
+});
+
 // Se asegura que la base de datos esté creada
 // Intentar crear la base de datos solo si la conexión existe
 try
@@ -154,7 +168,10 @@ app.UseCors("AllowSpecificOrigin");
 app.UseAuthentication(); // Usa el esquema de autenticación configurado
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 // Mapear los controladores
 app.MapControllers();

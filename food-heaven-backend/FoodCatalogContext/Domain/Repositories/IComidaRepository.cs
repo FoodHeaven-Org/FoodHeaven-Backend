@@ -12,4 +12,6 @@ public interface IComidaRepository: IBaseRepository<Comida>
     Task<IEnumerable<Comida>> ListByTipoComidaAsync(int idTipoComida);
 
     Task<bool> AllMealIdsExistAsync(IEnumerable<int> mealIds);
+
+    Task<IReadOnlyDictionary<int, int>> GetMealTypeIdsByMealIdsAsync(IEnumerable<int> mealIds);
 }

@@ -46,4 +46,19 @@ public class ComidaRepository(FoodHeavenContext context)
 
         return existingMealIdsCount == distinctMealIds.Length;
     }
+
+    public async Task<IReadOnlyDictionary<int, int>> GetMealTypeIdsByMealIdsAsync(IEnumerable<int> mealIds)
+    {
+        var distinctMealIds = mealIds
+            .Where(id => id > 0)
+            .Distinct()
+            .ToArray();
+
+        if (distinctMealIds.Length == 0) return new Dictionary<int, int>();
+
+        return await Context.Set<Comida>()
+            .Where(c => distinctMealIds.Contains(c.Id))
+            .Select(c => new { c.Id, c.id_tipo_comida })
+            .ToDictionaryAsync(c => c.Id, c => c.id_tipo_comida);
+    }
 }
