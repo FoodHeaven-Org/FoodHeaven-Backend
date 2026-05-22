@@ -17,6 +17,9 @@ public class PlanComidaCommandServiceImpl(
     ExternalUserSubscriptionService externalUserSubscriptionService)
     : IPlanComidaCommandService
 {
+    private const int DaysInWeek = 7;
+    private const int MealTypesPerDay = 3;
+
     private readonly IPlanComidaRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     private readonly IValidator<CreatePlanComidaCommand> _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -32,6 +35,7 @@ public class PlanComidaCommandServiceImpl(
             throw new ValidationException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
 
         await EnsurePlanIsSchedulableAsync(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas);
+        EnsureProtectedMealDaysAreNotSelected(command.FechaInicio, command.ListaComidas);
 
         var entity = new PlanComida(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas);
 
@@ -49,6 +53,7 @@ public class PlanComidaCommandServiceImpl(
         if (entity == null) throw new DataException("Plan not found.");
 
         await EnsurePlanIsSchedulableAsync(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas, id);
+        EnsureProtectedMealDaysAreNotChanged(command.FechaInicio, entity.ListaComidas, command.ListaComidas);
 
         entity.UpdateDetails(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas);
 
@@ -84,6 +89,45 @@ public class PlanComidaCommandServiceImpl(
         if (await _repository.ExistsOverlappingPlanForUserAsync(userId, startDate, endDate, currentPlanId))
         {
             throw new InvalidOperationException("The user already has a meal plan that overlaps this date range.");
+        }
+    }
+
+    private static void EnsureProtectedMealDaysAreNotSelected(DateTime startDate, int[] mealSlots)
+    {
+        foreach (var slotIndex in GetProtectedSlotIndexes(startDate))
+        {
+            if (mealSlots[slotIndex] > 0)
+            {
+                throw new InvalidOperationException("Meal changes for today or past days must be scheduled for the next week.");
+            }
+        }
+    }
+
+    private static void EnsureProtectedMealDaysAreNotChanged(DateTime startDate, int[] currentMealSlots, int[] nextMealSlots)
+    {
+        foreach (var slotIndex in GetProtectedSlotIndexes(startDate))
+        {
+            if (currentMealSlots[slotIndex] != nextMealSlots[slotIndex])
+            {
+                throw new InvalidOperationException("Meal changes for today or past days must be scheduled for the next week.");
+            }
+        }
+    }
+
+    private static IEnumerable<int> GetProtectedSlotIndexes(DateTime startDate)
+    {
+        var today = DateTime.Today;
+        var start = startDate.Date;
+
+        for (var dayIndex = 0; dayIndex < DaysInWeek; dayIndex++)
+        {
+            var mealDate = start.AddDays(dayIndex);
+            if (mealDate > today) continue;
+
+            for (var mealTypeIndex = 0; mealTypeIndex < MealTypesPerDay; mealTypeIndex++)
+            {
+                yield return mealTypeIndex * DaysInWeek + dayIndex;
+            }
         }
     }
 }
