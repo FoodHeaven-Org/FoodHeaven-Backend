@@ -7,12 +7,14 @@ public class ExternalUserSubscriptionService(ISecurityContextFacade securityCont
     private const int DaysInWeek = 7;
     private const int MealTypesPerDay = 3;
 
-    public async Task EnsurePlanFitsSubscriptionAsync(int userId, int[] mealSlots)
+    public async Task EnsurePlanFitsSubscriptionAsync(int userId, DateTime startDate, int[] mealSlots)
     {
         var mealsPerDayLimit = await securityContextFacade.GetMealsPerDayLimitByUserIdAsync(userId);
 
         for (var dayIndex = 0; dayIndex < DaysInWeek; dayIndex++)
         {
+            if (IsProtectedMealDay(startDate, dayIndex)) continue;
+
             var selectedMeals = 0;
 
             for (var mealTypeIndex = 0; mealTypeIndex < MealTypesPerDay; mealTypeIndex++)
@@ -29,5 +31,10 @@ public class ExternalUserSubscriptionService(ISecurityContextFacade securityCont
                 throw new InvalidOperationException($"Your current subscription allows up to {mealsPerDayLimit} meal(s) per day.");
             }
         }
+    }
+
+    private static bool IsProtectedMealDay(DateTime startDate, int dayIndex)
+    {
+        return startDate.Date.AddDays(dayIndex) <= DateTime.Today;
     }
 }
