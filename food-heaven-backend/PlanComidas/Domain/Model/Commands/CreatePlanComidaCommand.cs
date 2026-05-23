@@ -6,8 +6,9 @@ public record CreatePlanComidaCommand
     public DateTime FechaInicio { get; init; }
     public DateTime FechaFin { get; init; }
     public int[] ListaComidas { get; init; }
+    public string[]? HorariosEntrega { get; init; }
 
-    public CreatePlanComidaCommand(int idUsuario, DateTime fechaInicio, DateTime fechaFin, int[] listaComidas)
+    public CreatePlanComidaCommand(int idUsuario, DateTime fechaInicio, DateTime fechaFin, int[] listaComidas, string[]? horariosEntrega = null)
     {
         if (idUsuario <= 0) throw new ArgumentException("IdUsuario must be greater than zero.", nameof(idUsuario));
         if (fechaInicio == default) throw new ArgumentException("FechaInicio is required.", nameof(fechaInicio));
@@ -18,5 +19,6 @@ public record CreatePlanComidaCommand
         FechaInicio = fechaInicio;
         FechaFin = fechaFin;
         ListaComidas = listaComidas;
+        HorariosEntrega = horariosEntrega;
     }
 }

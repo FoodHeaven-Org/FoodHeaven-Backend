@@ -37,7 +37,7 @@ public class PlanComidaCommandServiceImpl(
         await EnsurePlanIsSchedulableAsync(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas);
         EnsureProtectedMealDaysAreNotSelected(command.FechaInicio, command.ListaComidas);
 
-        var entity = new PlanComida(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas);
+        var entity = new PlanComida(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas, command.HorariosEntrega);
 
         await _repository.AddAsync(entity);
         await _unitOfWork.CompleteAsync();
@@ -52,10 +52,17 @@ public class PlanComidaCommandServiceImpl(
         var entity = await _repository.FindByIdAsync(id);
         if (entity == null) throw new DataException("Plan not found.");
 
-        await EnsurePlanIsSchedulableAsync(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas, id);
-        EnsureProtectedMealDaysAreNotChanged(command.FechaInicio, entity.ListaComidas, command.ListaComidas);
+        var nextDeliverySchedules = command.HorariosEntrega ?? entity.HorariosEntrega;
 
-        entity.UpdateDetails(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas);
+        await EnsurePlanIsSchedulableAsync(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas, id);
+        EnsureProtectedMealDaysAreNotChanged(
+            command.FechaInicio,
+            entity.ListaComidas,
+            command.ListaComidas,
+            entity.HorariosEntrega,
+            nextDeliverySchedules);
+
+        entity.UpdateDetails(command.IdUsuario, command.FechaInicio, command.FechaFin, command.ListaComidas, nextDeliverySchedules);
 
         _repository.Update(entity);
         await _unitOfWork.CompleteAsync();
@@ -103,11 +110,17 @@ public class PlanComidaCommandServiceImpl(
         }
     }
 
-    private static void EnsureProtectedMealDaysAreNotChanged(DateTime startDate, int[] currentMealSlots, int[] nextMealSlots)
+    private static void EnsureProtectedMealDaysAreNotChanged(
+        DateTime startDate,
+        int[] currentMealSlots,
+        int[] nextMealSlots,
+        string[] currentDeliverySchedules,
+        string[] nextDeliverySchedules)
     {
         foreach (var slotIndex in GetProtectedSlotIndexes(startDate))
         {
-            if (currentMealSlots[slotIndex] != nextMealSlots[slotIndex])
+            if (currentMealSlots[slotIndex] != nextMealSlots[slotIndex]
+                || !string.Equals(currentDeliverySchedules[slotIndex], nextDeliverySchedules[slotIndex], StringComparison.Ordinal))
             {
                 throw new InvalidOperationException("Meal changes for today or past days must be scheduled for the next week.");
             }

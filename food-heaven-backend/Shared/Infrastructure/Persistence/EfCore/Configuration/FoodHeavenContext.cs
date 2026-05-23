@@ -124,6 +124,13 @@ namespace food_heaven_backend.Shared.Infrastructure.Persistence.EfCore.Configura
                         v => string.Join(",", v),  // Convertir el array de enteros en un string separado por comas
                         v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray()  // Convertir el string de vuelta a un array de enteros
                     );
+
+                entity.Property(pc => pc.HorariosEntrega)
+                    .HasColumnName("horarios_entrega")
+                    .HasConversion(
+                        v => PlanComida.SerializeDeliverySchedules(v),
+                        v => PlanComida.ParseDeliverySchedules(v)
+                    );
             });
         }
     }

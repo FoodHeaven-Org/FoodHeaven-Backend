@@ -164,7 +164,8 @@ public class UserCommandServiceImpl : IUserCommandService
                 mealPlan.IdUsuario,
                 mealPlan.FechaInicio,
                 mealPlan.FechaFin,
-                trimmedMealSlots);
+                trimmedMealSlots,
+                mealPlan.HorariosEntrega);
 
             _planComidaRepository.Update(mealPlan);
         }
