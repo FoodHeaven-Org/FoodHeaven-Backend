@@ -91,7 +91,7 @@ public class PlanComidaCommandServiceImpl(
     {
         await _externalFoodCatalogService.EnsureMealsExistAsync(mealIds);
         await _externalFoodCatalogService.EnsureMealSlotsMatchMealTypesAsync(mealIds);
-        await _externalUserSubscriptionService.EnsurePlanFitsSubscriptionAsync(userId, startDate, mealIds);
+        await _externalUserSubscriptionService.EnsurePlanFitsSubscriptionAsync(userId, mealIds);
 
         if (await _repository.ExistsOverlappingPlanForUserAsync(userId, startDate, endDate, currentPlanId))
         {
@@ -119,12 +119,29 @@ public class PlanComidaCommandServiceImpl(
     {
         foreach (var slotIndex in GetProtectedSlotIndexes(startDate))
         {
+            if (CanClearProtectedMealSlot(currentMealSlots, nextMealSlots, currentDeliverySchedules, nextDeliverySchedules, slotIndex))
+            {
+                continue;
+            }
+
             if (currentMealSlots[slotIndex] != nextMealSlots[slotIndex]
                 || !string.Equals(currentDeliverySchedules[slotIndex], nextDeliverySchedules[slotIndex], StringComparison.Ordinal))
             {
                 throw new InvalidOperationException("Meal changes for today or past days must be scheduled for the next week.");
             }
         }
+    }
+
+    private static bool CanClearProtectedMealSlot(
+        int[] currentMealSlots,
+        int[] nextMealSlots,
+        string[] currentDeliverySchedules,
+        string[] nextDeliverySchedules,
+        int slotIndex)
+    {
+        return currentMealSlots[slotIndex] > 0
+            && nextMealSlots[slotIndex] == 0
+            && string.Equals(currentDeliverySchedules[slotIndex], nextDeliverySchedules[slotIndex], StringComparison.Ordinal);
     }
 
     private static IEnumerable<int> GetProtectedSlotIndexes(DateTime startDate)
