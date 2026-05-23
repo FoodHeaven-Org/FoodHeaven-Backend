@@ -7,7 +7,8 @@ public record PlanComidaResource(
     int IdUsuario,
     DateTime FechaInicio,
     DateTime FechaFin,
-    int[] ListaComidas
+    int[] ListaComidas,
+    string[] HorariosEntrega
 )
 {
     public static PlanComidaResource FromEntity(PlanComida plan)
@@ -17,7 +18,8 @@ public record PlanComidaResource(
             plan.IdUsuario,
             plan.FechaInicio,
             plan.FechaFin,
-            plan.ListaComidas
+            plan.ListaComidas,
+            plan.HorariosEntrega
         );
     }
 }

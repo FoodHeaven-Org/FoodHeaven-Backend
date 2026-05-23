@@ -10,6 +10,7 @@ using food_heaven_backend.PlanComidas.Application.Internal.QueryServices;
 using food_heaven_backend.PlanComidas.Infrastructure.Persistence.EfCore.Repositories;
 using FluentValidation;
 using food_heaven_backend.PlanComidas.Domain.Model.Commands;
+using food_heaven_backend.PlanComidas.Domain.Model.Entities;
 using food_heaven_backend.PlanComidas.Application.Internal.Validators;
 using food_heaven_backend.FoodCatalogContext.Application.Internal.CommandServices;
 using food_heaven_backend.FoodCatalogContext.Application.Internal.QueryServices;
@@ -140,6 +141,7 @@ try
     {
         await context.Database.EnsureCreatedAsync();
         await EnsureLocalUserProfileSchemaAsync(context);
+        await EnsureLocalMealPlanSchemaAsync(context);
         await EnsureLocalMealCatalogSchemaAsync(context);
         await FoodHeavenDataSeeder.SeedAsync(context);
     }
@@ -193,6 +195,24 @@ static async Task EnsureLocalUserProfileSchemaAsync(FoodHeavenContext context)
         await EnsureColumnAsync(context, "user", "payment_card_expiration", "TEXT NOT NULL DEFAULT ''");
         await EnsureColumnAsync(context, "Comida", "nombre_en", "TEXT NOT NULL DEFAULT ''");
         await EnsureColumnAsync(context, "Comida", "complemento_en", "TEXT NOT NULL DEFAULT ''");
+    }
+    finally
+    {
+        await context.Database.CloseConnectionAsync();
+    }
+}
+
+static async Task EnsureLocalMealPlanSchemaAsync(FoodHeavenContext context)
+{
+    await context.Database.OpenConnectionAsync();
+
+    try
+    {
+        await EnsureColumnAsync(
+            context,
+            "PlanComida",
+            "horarios_entrega",
+            $"TEXT NOT NULL DEFAULT '{PlanComida.DefaultDeliverySchedulesStorageValue}'");
     }
     finally
     {

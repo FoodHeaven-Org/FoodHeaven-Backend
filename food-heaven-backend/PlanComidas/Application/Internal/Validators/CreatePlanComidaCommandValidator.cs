@@ -24,5 +24,9 @@ public class CreatePlanComidaCommandValidator : AbstractValidator<CreatePlanComi
         RuleForEach(p => p.ListaComidas)
             .GreaterThanOrEqualTo(0)
             .WithMessage("Each meal slot must be empty or reference a positive meal ID.");
+
+        RuleFor(p => p.HorariosEntrega)
+            .Must(array => array == null || array.Length == 21)
+            .WithMessage("The weekly plan must contain exactly 21 delivery schedules.");
     }
 }
